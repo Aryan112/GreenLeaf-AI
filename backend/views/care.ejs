@@ -1,0 +1,394 @@
+<!-- Plant Care Guide -->
+<style>
+.care-page-header {
+    background: linear-gradient(135deg, #1e3c1a 0%, #2d5a27 50%, #3d7a33 100%);
+    padding: 150px 20px 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.care-page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(127, 176, 105, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(76, 175, 80, 0.2) 0%, transparent 50%);
+    animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.care-page-header h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 3px 5px 15px rgba(0,0,0,0.4);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.care-page-subtitle {
+    font-size: 1.4rem;
+    color: rgba(255,255,255,0.95);
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    line-height: 1.6;
+}
+
+.care-guide-section {
+    padding: 80px 20px;
+    background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.section-intro {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 60px;
+}
+
+.section-intro h2 {
+    font-size: 2.5rem;
+    color: #2d5a27;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.section-intro p {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.8;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 35px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.tip-card {
+    background: white;
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(45, 90, 39, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.tip-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #2d5a27, #7fb069);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.tip-card:hover::before {
+    transform: scaleX(1);
+}
+
+.tip-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 60px rgba(45, 90, 39, 0.2);
+    border-color: #7fb069;
+}
+
+.tip-icon {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, #2d5a27 0%, #4a7c3e 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    font-size: 2.5rem;
+    color: white;
+    box-shadow: 0 10px 30px rgba(45, 90, 39, 0.3);
+    transition: all 0.4s ease;
+}
+
+.tip-card:hover .tip-icon {
+    transform: rotateY(360deg) scale(1.1);
+    box-shadow: 0 15px 40px rgba(45, 90, 39, 0.4);
+}
+
+.tip-card h3 {
+    font-size: 1.6rem;
+    color: #2d5a27;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.tip-card p {
+    color: #666;
+    line-height: 1.8;
+    text-align: center;
+    font-size: 1.05rem;
+}
+
+@media (max-width: 768px) {
+    .care-page-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .care-page-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+}
+</style>
+
+<div class="care-page-header">
+    <div class="container">
+        <h1>🌿 Plant Care Guide</h1>
+        <p class="care-page-subtitle">Master the art of plant care with expert tips on watering, lighting, soil, and seasonal maintenance to keep your green friends thriving</p>
+    </div>
+</div>
+
+<section class="care-guide-section">
+    <div class="container">
+        <div class="section-intro">
+            <h2>Essential Care Tips</h2>
+            <p>Understanding the fundamentals of plant care is key to growing healthy, vibrant plants. Follow these expert guidelines to create the perfect environment for your botanical companions.</p>
+        </div>
+        
+        <div class="tips-grid">
+            <div class="tip-card">
+                <div class="tip-icon"><i class="fas fa-tint"></i></div>
+                <h3>Watering</h3>
+                <p>Most plants prefer the soil to dry slightly between waterings. Water deeply until excess drains out, then wait until the top inch of soil is dry. Overwatering is the #1 cause of plant death!</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon"><i class="fas fa-sun"></i></div>
+                <h3>Lighting</h3>
+                <p>Bright, indirect light works for most houseplants. Avoid harsh midday sun through glass which can scorch leaves. Rotate plants weekly for even growth and consider grow lights for darker spaces.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon"><i class="fas fa-leaf"></i></div>
+                <h3>Soil & Drainage</h3>
+                <p>Use well-draining potting mix enriched with organic matter. Add perlite for aeration. Succulents and cacti need extra drainage with sand or pumice. Never use garden soil indoors!</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon"><i class="fas fa-thermometer-half"></i></div>
+                <h3>Temperature</h3>
+                <p>Keep temps between 18-24°C (65-75°F) for most houseplants. Avoid drafts, air conditioners, and heating vents. Tropical plants need warmer temps; succulents tolerate cooler conditions.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon"><i class="fas fa-bug"></i></div>
+                <h3>Pest Control</h3>
+                <p>Check leaf undersides regularly for pests. Early detection is crucial! Treat with insecticidal soap or neem oil. Quarantine new plants for 2 weeks before adding to your collection.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon"><i class="fas fa-seedling"></i></div>
+                <h3>Fertilizing</h3>
+                <p>Feed plants during active growth (spring-summer) with diluted balanced fertilizer. Reduce or stop in fall and winter when growth slows. Over-fertilizing can damage roots and burn leaves.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Category-specific Care Cards -->
+<section class="care-categories-section">
+    <div class="container">
+        <div class="section-intro">
+            <h2>Care by Plant Type</h2>
+            <p>Different plants have different needs. Here's your quick reference guide for the most popular plant categories.</p>
+        </div>
+        
+        <div class="care-category-grid">
+            <div class="care-category-card">
+                <div class="care-category-icon"><i class="fas fa-home"></i></div>
+                <h3>Indoor Plants</h3>
+                <ul class="care-list">
+                    <li><i class="fas fa-tint"></i> <strong>Water:</strong> When top 2-3 cm soil is dry</li>
+                    <li><i class="fas fa-sun"></i> <strong>Light:</strong> Bright, indirect light</li>
+                    <li><i class="fas fa-seedling"></i> <strong>Soil:</strong> Well-draining mix with perlite</li>
+                    <li><i class="fas fa-flask"></i> <strong>Fertilizer:</strong> Monthly in spring/summer</li>
+                </ul>
+                <button class="btn-category">View Indoor Plants</button>
+            </div>
+            
+            <div class="care-category-card">
+                <div class="care-category-icon"><i class="fas fa-tree"></i></div>
+                <h3>Outdoor Plants</h3>
+                <ul class="care-list">
+                    <li><i class="fas fa-tint"></i> <strong>Water:</strong> 2-3×/week; daily in heat</li>
+                    <li><i class="fas fa-sun"></i> <strong>Light:</strong> 4-6 hrs direct morning sun</li>
+                    <li><i class="fas fa-seedling"></i> <strong>Soil:</strong> Rich loam with compost</li>
+                    <li><i class="fas fa-flask"></i> <strong>Fertilizer:</strong> Balanced NPK every 4-6 weeks</li>
+                </ul>
+                <button class="btn-category">View Outdoor Plants</button>
+            </div>
+            
+            <div class="care-category-card">
+                <div class="care-category-icon"><i class="fas fa-cactus"></i></div>
+                <h3>Succulents</h3>
+                <ul class="care-list">
+                    <li><i class="fas fa-tint"></i> <strong>Water:</strong> Every 2-3 weeks (dry out fully)</li>
+                    <li><i class="fas fa-sun"></i> <strong>Light:</strong> Bright light, some direct OK</li>
+                    <li><i class="fas fa-seedling"></i> <strong>Soil:</strong> Cactus mix with sand/perlite</li>
+                    <li><i class="fas fa-flask"></i> <strong>Fertilizer:</strong> Half-strength, monthly in growth</li>
+                </ul>
+                <button class="btn-category">View Succulents</button>
+            </div>
+            
+            <div class="care-category-card">
+                <div class="care-category-icon"><i class="fas fa-spa"></i></div>
+                <h3>Flowering Plants</h3>
+                <ul class="care-list">
+                    <li><i class="fas fa-tint"></i> <strong>Water:</strong> Keep evenly moist</li>
+                    <li><i class="fas fa-sun"></i> <strong>Light:</strong> 4-6 hrs bright light</li>
+                    <li><i class="fas fa-seedling"></i> <strong>Soil:</strong> Fertile, well-draining</li>
+                    <li><i class="fas fa-flask"></i> <strong>Fertilizer:</strong> High-phosphorus during bloom</li>
+                </ul>
+                <button class="btn-category">View Flowering Plants</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.care-categories-section {
+    padding: 80px 20px;
+    background: linear-gradient(180deg, #ffffff 0%, #f0f7f0 100%);
+}
+
+.care-category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 35px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.care-category-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(45, 90, 39, 0.08);
+    transition: all 0.4s ease;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.care-category-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 2px;
+    background: linear-gradient(135deg, #2d5a27, #7fb069);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.care-category-card:hover::after {
+    opacity: 1;
+}
+
+.care-category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(45, 90, 39, 0.15);
+}
+
+.care-category-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #2d5a27 0%, #4a7c3e 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    color: white;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 10px 30px rgba(45, 90, 39, 0.2);
+}
+
+.care-category-card h3 {
+    color: #2d5a27;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.care-list {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.care-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: #555;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.care-list i {
+    color: #7fb069;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.btn-category {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #2d5a27 0%, #4a7c3e 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-category:hover {
+    background: linear-gradient(135deg, #1f3f1c 0%, #2d5a27 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(45, 90, 39, 0.3);
+}
+
+@media (max-width: 768px) {
+    .care-category-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+

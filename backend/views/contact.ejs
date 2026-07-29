@@ -1,0 +1,855 @@
+<!-- Contact Page Content -->
+<style>
+.care-page-header {
+    background: linear-gradient(135deg, #1e3c1a 0%, #2d5a27 50%, #3d7a33 100%);
+    padding: 150px 20px 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.care-page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(127, 176, 105, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(76, 175, 80, 0.2) 0%, transparent 50%);
+    animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.care-page-header h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 3px 5px 15px rgba(0,0,0,0.4);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.care-page-subtitle {
+    font-size: 1.4rem;
+    color: rgba(255,255,255,0.95);
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .care-page-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .care-page-subtitle {
+        font-size: 1.1rem;
+    }
+}
+</style>
+
+<div class="care-page-header">
+    <div class="container">
+        <h1>📞 Contact Us</h1>
+        <p class="care-page-subtitle">Get in Touch with Our Plant Experts</p>
+    </div>
+</div>
+
+<section class="contact-main">
+    <div class="container">
+        <div class="contact-grid">
+            <!-- Contact Form -->
+            <div class="contact-form-section glass-morphism animate fade-up delay-1">
+                <h2 class="gradient-text">Send Us a Message</h2>
+                <p>Have a question about plant care, need help choosing the right plants, or want to schedule a service? We'd love to hear from you!</p>
+                
+                <form id="contactForm" class="contact-form">
+                    <div class="form-row">
+                        <div class="form-group animate slide-in delay-2">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group animate slide-in delay-3">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group animate slide-in delay-4">
+                            <label for="contactEmail">Email Address *</label>
+                            <input type="email" id="contactEmail" name="email" required>
+                        </div>
+                        <div class="form-group animate slide-in delay-5">
+                            <label for="contactPhone">Phone Number</label>
+                            <input type="tel" id="contactPhone" name="phone">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group animate slide-in delay-6">
+                        <label for="contactSubject">Subject *</label>
+                        <select id="contactSubject" name="subject" required>
+                            <option value="">Select a topic</option>
+                            <option value="plant-care">Plant Care Advice</option>
+                            <option value="product-inquiry">Product Inquiry</option>
+                            <option value="service-booking">Service Booking</option>
+                            <option value="shipping">Shipping & Delivery</option>
+                            <option value="return-exchange">Returns & Exchanges</option>
+                            <option value="wholesale">Wholesale Inquiry</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group animate slide-in delay-7">
+                        <label for="contactMessage">Message *</label>
+                        <textarea id="contactMessage" name="message" rows="6" placeholder="Please describe your question or how we can help you..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group animate slide-in delay-8">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="newsletter" name="newsletter">
+                            <span class="checkmark"></span>
+                            Subscribe to our newsletter for plant care tips and special offers
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-large glow-button animate pulse-glow delay-9">Send Message</button>
+                </form>
+            </div>
+            
+            <!-- Contact Information -->
+            <div class="contact-info-section animate fade-up delay-2">
+                <h2 class="gradient-text">Get in Touch</h2>
+                
+                <div class="contact-methods">
+                    <div class="contact-method glass-morphism animate fade-up delay-3">
+                        <div class="contact-icon gradient-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4 class="gradient-text">Phone Support</h4>
+                            <p>+1 (555) 123-4567</p>
+                            <p class="contact-hours">Mon-Fri: 8AM-7PM EST<br>Sat-Sun: 9AM-5PM EST</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method glass-morphism animate fade-up delay-4">
+                        <div class="contact-icon gradient-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4 class="gradient-text">Email Support</h4>
+                            <p>info@plantnursery.com</p>
+                            <p class="contact-hours">Response within 24 hours</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method glass-morphism animate fade-up delay-5">
+                        <div class="contact-icon gradient-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4 class="gradient-text">Visit Our Nursery</h4>
+                            <p>123 Garden Lane<br>Green Valley, CA 90210</p>
+                            <p class="contact-hours">Open 7 days a week<br>8AM-6PM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method glass-morphism animate fade-up delay-6">
+                        <div class="contact-icon gradient-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4 class="gradient-text">Live Chat</h4>
+                            <p>Chat with our plant experts</p>
+                            <button class="btn btn-secondary btn-small glow-button" id="startChat">Start Chat</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Emergency Contact -->
+                <div class="emergency-contact glass-morphism animate fade-up delay-7">
+                    <h3 class="gradient-text">Emergency Plant Care</h3>
+                    <p>For urgent plant care questions outside business hours:</p>
+                    <p class="emergency-number glowing-text">📞 +1 (555) 911-PLANT</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="contact-faq">
+    <div class="container">
+        <h2 class="gradient-text animate fade-up">Frequently Asked Questions</h2>
+        <div class="faq-grid">
+            <div class="faq-item glass-morphism animate fade-up delay-1">
+                <button class="faq-question" type="button">
+                    <span>How do I care for my new plants?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Each plant comes with detailed care instructions. Generally, check soil moisture regularly, provide appropriate light, and avoid overwatering. Our plant care guides and support team are always here to help!</p>
+                </div>
+            </div>
+            
+            <div class="faq-item glass-morphism animate fade-up delay-2">
+                <button class="faq-question" type="button">
+                    <span>What's your return policy?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>We offer a 30-day health guarantee on all plants. If your plant isn't thriving despite proper care, we'll replace it or provide a full refund. Contact us with photos and we'll help diagnose any issues.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item glass-morphism animate fade-up delay-3">
+                <button class="faq-question" type="button">
+                    <span>Do you offer delivery services?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes! We offer local delivery within 50 miles of our nursery, as well as nationwide shipping. Local delivery includes professional setup, while shipped plants come with detailed unpacking and care instructions.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item glass-morphism animate fade-up delay-4">
+                <button class="faq-question" type="button">
+                    <span>Can you help me choose the right plants?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Absolutely! Our plant consultation service helps you choose perfect plants for your space, lighting conditions, and experience level. Book a consultation or contact us with details about your space.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item glass-morphism animate fade-up delay-5">
+                <button class="faq-question" type="button">
+                    <span>Do you offer wholesale pricing?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes, we offer wholesale pricing for qualifying businesses, landscapers, and large orders. Contact us with details about your business and quantity requirements for a custom quote.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item glass-morphism animate fade-up delay-6">
+                <button class="faq-question" type="button">
+                    <span>What payment methods do you accept?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>We accept all major credit cards (Visa, MasterCard, American Express, Discover), PayPal, Apple Pay, Google Pay, and cash for in-person purchases at our nursery.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="contact-map">
+    <div class="container">
+        <h2 class="gradient-text animate fade-up">Visit Our Nursery</h2>
+        <div class="map-container animate fade-up delay-1">
+            <div class="map-placeholder glass-morphism">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3 class="gradient-text">PlantNursery Location</h3>
+                <p>123 Garden Lane<br>Green Valley, CA 90210</p>
+                <button class="btn btn-primary glow-button" onclick="getDirections()">Get Directions</button>
+            </div>
+        </div>
+        
+        <div class="location-details">
+            <div class="location-info glass-morphism animate fade-up delay-2">
+                <h3 class="gradient-text">Hours of Operation</h3>
+                <div class="hours-grid">
+                    <div class="hours-day animate slide-in delay-3">
+                        <span>Monday - Friday</span>
+                        <span>8:00 AM - 7:00 PM</span>
+                    </div>
+                    <div class="hours-day animate slide-in delay-4">
+                        <span>Saturday</span>
+                        <span>8:00 AM - 6:00 PM</span>
+                    </div>
+                    <div class="hours-day animate slide-in delay-5">
+                        <span>Sunday</span>
+                        <span>9:00 AM - 5:00 PM</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="location-info glass-morphism animate fade-up delay-3">
+                <h3 class="gradient-text">What to Expect</h3>
+                <ul class="location-features">
+                    <li class="animate slide-in delay-4"><i class="fas fa-check"></i> Over 500 plant varieties</li>
+                    <li class="animate slide-in delay-5"><i class="fas fa-check"></i> Expert staff on-site</li>
+                    <li class="animate slide-in delay-6"><i class="fas fa-check"></i> Free plant health checkups</li>
+                    <li class="animate slide-in delay-7"><i class="fas fa-check"></i> Ample parking available</li>
+                    <li class="animate slide-in delay-8"><i class="fas fa-check"></i> Pet-friendly environment</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Contact Page Hero */
+.contact-page-header {
+    background: linear-gradient(135deg, #1e3c1a 0%, #2d5a27 50%, #3d7a33 100%);
+    color: white;
+    padding: 150px 0 100px 0;
+    position: relative;
+    overflow: hidden;
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.contact-page-header h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    animation: fadeInUp 1s ease;
+}
+
+.contact-page-header .page-subtitle {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #e8f5e8;
+    font-weight: 300;
+    animation: fadeInUp 1.2s ease;
+}
+
+/* Contact Page Styles */
+.contact-main {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e8 50%, #f8f9fa 100%);
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.contact-form-section h2,
+.contact-info-section h2 {
+    color: #2d5a27;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.contact-form-section {
+    background: white;
+    padding: 3rem;
+    border-radius: 25px;
+    box-shadow: 0 20px 60px rgba(45, 90, 39, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form-section:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 80px rgba(45, 90, 39, 0.25);
+}
+
+.contact-form-section p {
+    color: #666;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+.contact-form {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--light-gray);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
+    margin-top: 0.1rem;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    width: 100%;
+}
+
+/* Contact Information */
+.contact-methods {
+    margin-bottom: 2rem;
+}
+
+.contact-method {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(45, 90, 39, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 4px solid #2d5a27;
+}
+
+.contact-method:hover {
+    transform: translateY(-5px) translateX(5px);
+    box-shadow: 0 20px 50px rgba(45, 90, 39, 0.2);
+}
+
+.contact-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #2d5a27, #4a7c3e);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    color: white;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.contact-method:hover .contact-icon {
+    transform: rotateY(360deg) scale(1.1);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(45, 90, 39, 0.7); }
+    50% { box-shadow: 0 0 0 15px rgba(45, 90, 39, 0); }
+}
+
+.contact-details h4 {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.contact-details p {
+    color: var(--text-color);
+    margin-bottom: 0.25rem;
+}
+
+.contact-hours {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.emergency-contact {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.emergency-contact h3 {
+    color: #856404;
+    margin-bottom: 0.5rem;
+}
+
+.emergency-contact p {
+    color: #856404;
+    margin-bottom: 0.5rem;
+}
+
+.emergency-number {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #856404;
+}
+
+/* FAQ Section */
+.contact-faq {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #2d5a27 0%, #3d7a33 50%, #4a7c3e 100%);
+}
+
+.contact-faq h2 {
+    text-align: center;
+    color: white;
+    font-size: 3.5rem;
+    margin-bottom: 3rem;
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.faq-grid {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: white;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 3px solid transparent;
+}
+
+.faq-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+    border-color: #ebf0e9ff;
+}
+
+.faq-question {
+    width: 100%;
+    padding: 1.5rem;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    transition: var(--transition);
+}
+
+.faq-question:hover {
+    background: var(--light-bg);
+}
+
+.faq-question i {
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px;
+}
+
+.faq-answer p {
+    padding: 0 1.5rem 1.5rem;
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Map Section */
+.contact-map {
+    padding: 4rem 0;
+    background: var(--light-bg);
+}
+
+.contact-map h2 {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.map-container {
+    margin-bottom: 3rem;
+}
+
+.map-placeholder {
+    background: white;
+    height: 400px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.map-placeholder i {
+    font-size: 4rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.map-placeholder h3 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.map-placeholder p {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.location-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.location-info {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.location-info h3 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.hours-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.hours-day {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.hours-day span:first-child {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.hours-day span:last-child {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.location-features {
+    list-style: none;
+}
+
+.location-features li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+}
+
+.location-features i {
+    color: var(--secondary-color);
+    margin-right: 0.75rem;
+}
+
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-form {
+        padding: 1.5rem;
+    }
+    
+    .contact-method {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .contact-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .location-details {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .map-placeholder {
+        height: 300px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Contact form handling
+    const contactForm = document.getElementById('contactForm');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(contactForm);
+            const contactData = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                subject: formData.get('subject'),
+                message: formData.get('message'),
+                newsletter: formData.get('newsletter') === 'on'
+            };
+            
+            // Show loading state
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Submit contact form
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(contactData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    if(typeof showNotification === 'function'){
+                        showNotification('Thank you! Your message has been sent successfully. We\'ll get back to you soon.', 'success');
+                    }else{
+                        alert('Thank you! Your message has been sent successfully.');
+                    }
+                    contactForm.reset();
+                } else {
+                    throw new Error(data.message || 'Failed to send message');
+                }
+            } catch (error) {
+                console.error('Contact form error:', error);
+                if(typeof showNotification === 'function'){
+                    showNotification('Failed to send message. Please try again or contact us directly.', 'error');
+                }else{
+                    alert('Failed to send message. Please try again.');
+                }
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    }
+    
+    // FAQ accordion functionality
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', function() {
+            const faqItem = this.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Toggle current item
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        });
+    });
+    
+    // Start chat functionality
+    const startChatBtn = document.getElementById('startChat');
+    if (startChatBtn) {
+        startChatBtn.addEventListener('click', function() {
+            // Simulate chat widget opening
+            showNotification('Chat feature coming soon! Please use our contact form or call us directly.', 'info');
+        });
+    }
+});
+
+// Get directions function
+function getDirections() {
+    const address = "123 Garden Lane, Green Valley, CA 90210";
+    const encodedAddress = encodeURIComponent(address);
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+    window.open(mapsUrl, '_blank');
+}
+</script>

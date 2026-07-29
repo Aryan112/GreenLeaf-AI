@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Dynamic page title -->
+    <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Plant Nursery - Premium Plants & Garden Supplies' %></title>
+    
+    <!-- Meta description for SEO -->
+    <meta name="description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'Discover premium plants, garden supplies, and expert care tips at our online plant nursery. From indoor houseplants to outdoor garden varieties.' %>">
+    
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'Plant Nursery - Premium Plants & Garden Supplies' %>">
+    <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'Discover premium plants and garden supplies at our online plant nursery.' %>">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : 'https://plantnursery.com' %>">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+    
+    <!-- User Dropdown Styling -->
+    <style>
+        .nav-user {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .nav-user i {
+            color: var(--primary-green);
+        }
+        
+        .nav-username {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 180px;
+            padding: 0.5rem 0;
+            margin-top: 0;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .nav-user:hover .dropdown-menu,
+        .dropdown-menu:hover {
+            display: block;
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .dropdown-item:hover {
+            background: #f5f5f5;
+            color: var(--primary-green);
+        }
+        
+        .dropdown-item i {
+            color: var(--primary-green);
+            width: 16px;
+        }
+    </style>
+    
+    <!-- Newsletter & Footer Styling -->
+    <style>
+        .newsletter {
+            margin-top: 1.5rem;
+        }
+        .newsletter h4 {
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--light-green);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .newsletter-form input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
+        }
+        .newsletter-form button {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .newsletter-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 90, 39, 0.3);
+        }
+        .newsletter-form button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .newsletter-message {
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+    </style>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Additional head content from child templates -->
+    <% if (typeof additionalCSS !== 'undefined' && additionalCSS) { %>
+        <%- additionalCSS %>
+    <% } %>
+</head>
+<body>
+    <!-- Unified Navigation Header (same as homepage) -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <div class="nav-logo">
+                <i class="fas fa-leaf"></i>
+                <a href="/"><span>GreenLeaf</span></a>
+            </div>
+
+           
+
+            <!-- Navigation Menu -->
+            <div class="nav-menu" id="nav-menu">
+                <a href="/" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">Home</a>
+                <a href="/pots" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'pots' ? 'active' : '' %>">Pots</a>
+                <a href="/tools" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'tools' ? 'active' : '' %>">Tools</a>
+                <a href="/care" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'care' ? 'active' : '' %>">Care</a>
+                <a href="/services" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'services' ? 'active' : '' %>">Services</a>
+                <a href="/gifting" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'gifting' ? 'active' : '' %>">Gifting</a>
+                <a href="/contact" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'contact' ? 'active' : '' %>">Contact</a>
+            </div>
+
+            <!-- Cart and User Icons -->
+            <div class="nav-icons">
+                <div class="cart-icon" id="cartToggle">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </div>
+                <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+                    <div class="nav-user dropdown">
+                        <i class="fas fa-user"></i>
+                        <span class="nav-username"><%= currentUser.name.split(' ')[0] %></span>
+                        <div class="dropdown-menu">
+                            <a href="/orders" class="dropdown-item">
+                                <i class="fas fa-shopping-bag"></i> My Orders
+                            </a>
+                            <button id="logoutBtn" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <a href="/login" class="nav-link">Login</a>
+                <% } %>
+                <!-- Mobile Menu Toggle -->
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Page-specific content goes here -->
+        <%- body %>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <i class="fas fa-leaf"></i>
+                    <span>GreenLeaf Nursery</span>
+                </div>
+                <p>Your trusted partner in creating beautiful, green spaces. Quality plants and expert care advice.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/care">Plant Care</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/services">Services</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="/categories?category=indoor">Indoor Plants</a></li>
+                    <li><a href="/categories?category=outdoor">Outdoor Plants</a></li>
+                    <li><a href="/categories?category=flowering">Flowering Plants</a></li>
+                    <li><a href="/categories?category=succulent">Succulents</a></li>
+                    <li><a href="/tools">Garden Tools</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Garden Street, Plant City, PC 12345</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@greenleafnursery.com</p>
+                </div>
+                
+                <div class="newsletter">
+                    <h4>Subscribe to Newsletter</h4>
+                    <form id="newsletterForm" class="newsletter-form">
+                        <input type="email" id="newsletterEmail" name="email" placeholder="Enter your email" required>
+                        <button type="submit" id="newsletterSubscribe">Subscribe</button>
+                    </form>
+                    <div id="newsletter-message" class="newsletter-message" style="display: none; margin-top: 0.5rem; font-size: 0.9rem;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; <%= new Date().getFullYear() %> GreenLeaf Nursery. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Cart Modal -->
+    <div class="modal cart-modal" id="cart-modal">
+        <div class="cart-modal-content">
+            <div class="cart-header">
+                <h2>Shopping Cart</h2>
+                <button class="close-modal" id="close-cart" aria-label="Close cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="cart-body" id="cart-items">
+                <!-- Cart items will be loaded here dynamically by cart.js -->
+            </div>
+            
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <div class="total-row">
+                        <span>Total:</span>
+                        <span id="cart-total">₹0</span>
+                    </div>
+                </div>
+                <div class="cart-actions">
+                    <button class="btn btn-secondary continue-shopping">Continue Shopping</button>
+                    <button class="btn btn-primary checkout-btn">Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner-circle"></div>
+            <i class="fas fa-leaf spin-leaf"></i>
+            <p>Loading...</p>
+        </div>
+    </div>
+    
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
+    <!-- JavaScript Files -->
+    <script>
+        // Make cart session ID available globally
+        window.cartSessionId = '<%= typeof cartSessionId !== "undefined" ? cartSessionId : "" %>';
+        
+        // Make current page available for JavaScript
+        window.currentPage = '<%= typeof currentPage !== "undefined" ? currentPage : "" %>';
+        
+        // API base URL for AJAX calls
+        window.apiBaseUrl = '/api';
+        
+        // Make products data available globally (will be set by individual pages if needed)
+        if (typeof window.allProductsData === 'undefined') {
+            window.allProductsData = [];
+        }
+        
+        // User authentication status
+        // eslint-disable-next-line
+        window.isAuthenticated = <%= typeof currentUser !== 'undefined' && currentUser ? 'true' : 'false' %> === 'true';
+        // eslint-disable-next-line
+        window.currentUser = <%- typeof currentUser !== 'undefined' && currentUser ? JSON.stringify({id: currentUser.id, name: currentUser.name, email: currentUser.email}) : null %>;
+        
+        // Configuration object
+        window.appConfig = {
+            cartSessionId: '<%= typeof cartSessionId !== "undefined" ? cartSessionId : "" %>',
+            currentPage: '<%= typeof currentPage !== "undefined" ? currentPage : "" %>',
+            apiBaseUrl: '/api',
+            enableNotifications: true,
+            autoSaveCart: true,
+            productsLoaded: true,
+            isAuthenticated: <%= typeof currentUser !== 'undefined' && currentUser ? 'true' : 'false' %>
+        };
+    </script>
+    
+    <!-- Socket.io Client Library (for WebSocket real-time updates) -->
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    
+    <!-- Browser Cache Manager (LocalStorage) - Load First -->
+    <script src="/js/browser-cache.js"></script>
+    
+    <!-- Core JavaScript modules -->
+    <script src="/js/main.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/products.js"></script>
+    <script src="/js/filters.js"></script>
+    
+    <!-- Newsletter subscription handler (must load early to avoid conflicts) -->
+    <script src="/js/newsletter.js"></script>
+    
+    <!-- Real-Time Features Integration -->
+    <script src="/js/jwt-integration.js"></script>
+    <script src="/js/websocket-integration.js"></script>
+    <script>
+        // Logout handler
+        document.addEventListener('DOMContentLoaded',()=>{
+            const btn=document.getElementById('logoutBtn');
+            if(btn){
+                btn.addEventListener('click', async()=>{
+                    try{
+                        const res=await fetch('/api/auth/logout',{method:'POST'});
+                        const data=await res.json();
+                        if(data.success){ window.location.href = '/'; }
+                    }catch(e){ console.error(e); }
+                });
+            }
+        });
+    </script>
+    
+    <!-- Additional JavaScript from child templates -->
+    <% if (typeof additionalJS !== 'undefined' && additionalJS) { %>
+        <%- additionalJS %>
+    <% } %>
+    
+    <!-- Page-specific inline scripts -->
+    <% if (typeof inlineJS !== 'undefined' && inlineJS) { %>
+        <script>
+            // <%-inlineJS%>
+        </script>
+    <% } %>
+    
+    <!-- Hamburger Menu Toggle Script -->
+    <script>
+        // Hamburger menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', function() {
+                    // Toggle active class on both elements
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                    
+                    // Prevent body scroll when menu is open
+                    if (navMenu.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+                
+                // Close menu when clicking on a nav link
+                const navLinks = document.querySelectorAll('.nav-menu .nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!navMenu.contains(event.target) && !hamburger.contains(event.target)) {
+                        if (navMenu.classList.contains('active')) {
+                            hamburger.classList.remove('active');
+                            navMenu.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

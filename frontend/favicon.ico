@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple plant leaf icon for favicon -->
+  <path d="M16 4C12 4 8 8 8 16C8 20 12 28 16 28C20 28 24 20 24 16C24 8 20 4 16 4Z" fill="#4CAF50"/>
+  <path d="M16 6C18 6 20 8 20 12C20 16 18 22 16 22C14 22 12 16 12 12C12 8 14 6 16 6Z" fill="#8BC34A"/>
+  <line x1="16" y1="22" x2="16" y2="28" stroke="#8D6E63" stroke-width="2"/>
+</svg>

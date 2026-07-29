@@ -1,0 +1,337 @@
+<!-- Gifting Page -->
+<style>
+.gifting-hero {
+    background: linear-gradient(135deg, #1e3c1a 0%, #2d5a27 50%, #4a7c3e 100%);
+    padding: 150px 20px 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.gifting-hero::before {
+    content: '🎁';
+    position: absolute;
+    font-size: 300px;
+    opacity: 0.05;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(-50%, -50%) rotate(-15deg); }
+    50% { transform: translate(-50%, -55%) rotate(-10deg); }
+}
+
+.gifting-hero h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 3px 5px 15px rgba(0,0,0,0.4);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.gifting-hero p {
+    font-size: 1.4rem;
+    color: rgba(255,255,255,0.95);
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.gifting-intro {
+    padding: 80px 20px;
+    background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.intro-card {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 4rem 3rem;
+    border-radius: 25px;
+    box-shadow: 0 15px 50px rgba(45, 90, 39, 0.12);
+    text-align: center;
+    border: 3px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, #7fb069, #2d5a27) border-box;
+}
+
+.intro-card h2 {
+    font-size: 2.5rem;
+    color: #2d5a27;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.intro-card p {
+    font-size: 1.2rem;
+    color: #666;
+    line-height: 1.8;
+}
+
+.gifting-options {
+    padding: 80px 20px;
+    background: linear-gradient(180deg, #ffffff 0%, #f0f7f0 100%);
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2d5a27;
+    margin-bottom: 60px;
+    font-weight: 700;
+}
+
+.gifting-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.gift-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 25px;
+    box-shadow: 0 15px 50px rgba(45, 90, 39, 0.1);
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.gift-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #2d5a27, #7fb069, #2d5a27);
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.gift-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 25px 70px rgba(45, 90, 39, 0.2);
+}
+
+.gift-icon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #2d5a27 0%, #4a7c3e 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    font-size: 2.8rem;
+    color: white;
+    box-shadow: 0 15px 40px rgba(45, 90, 39, 0.3);
+    transition: all 0.4s ease;
+}
+
+.gift-card:hover .gift-icon {
+    transform: rotateY(360deg) scale(1.1);
+}
+
+.gift-card h3 {
+    font-size: 1.8rem;
+    color: #2d5a27;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.gift-card p {
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+}
+
+.btn {
+    padding: 14px 32px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2d5a27 0%, #4a7c3e 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(45, 90, 39, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #1f3f1c 0%, #2d5a27 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(45, 90, 39, 0.4);
+}
+
+.btn-secondary {
+    background: white;
+    color: #2d5a27;
+    border: 2px solid #2d5a27;
+}
+
+.btn-secondary:hover {
+    background: #2d5a27;
+    color: white;
+}
+
+.gifting-cta {
+    padding: 100px 20px;
+    background: linear-gradient(135deg, #1e3c1a 0%, #2d5a27 50%, #3d7a33 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.gifting-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M0,300 Q300,200 600,300 T1200,300 L1200,600 L0,600 Z" fill="rgba(255,255,255,0.05)"/></svg>') no-repeat center bottom;
+    opacity: 0.5;
+}
+
+.cta-card {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.cta-card h2 {
+    font-size: 3rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+}
+
+.cta-card p {
+    font-size: 1.3rem;
+    color: rgba(255,255,255,0.95);
+    margin-bottom: 3rem;
+    line-height: 1.8;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-large {
+    padding: 18px 40px;
+    font-size: 1.2rem;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 3px solid white;
+    color: white;
+}
+
+.btn-outline:hover {
+    background: white;
+    color: #2d5a27;
+}
+
+@media (max-width: 768px) {
+    .gifting-hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .gifting-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .intro-card,
+    .cta-card {
+        padding: 2rem;
+    }
+    
+    .cta-card h2 {
+        font-size: 2rem;
+    }
+}
+</style>
+
+<div class="gifting-hero">
+    <div class="container">
+        <h1>🎁 Plant Gifting</h1>
+        <p>Give the gift of green - thoughtful, sustainable, and memorable gifts for every occasion</p>
+    </div>
+</div>
+
+<section class="gifting-intro">
+    <div class="container">
+        <div class="intro-card">
+            <h2>Why Gift Plants?</h2>
+            <p>Plants are living, growing reminders of your care and thoughtfulness. They purify air, boost mood, and bring nature indoors. Perfect for birthdays, anniversaries, housewarmings, corporate gifting, and every special moment in between.</p>
+        </div>
+    </div>
+</section>
+
+<section class="gifting-options">
+    <div class="container">
+        <h2 class="section-title">Gifting Options</h2>
+        <div class="gifting-grid">
+            <div class="gift-card">
+                <div class="gift-icon"><i class="fas fa-seedling"></i></div>
+                <h3>Curated Plant Sets</h3>
+                <p>Beautifully paired plants and planters, professionally packaged and ready to gift. Each set includes care instructions and a handwritten note card.</p>
+                <a href="/categories?collection=gift-sets" class="btn btn-primary">Explore Gift Sets</a>
+            </div>
+            
+            <div class="gift-card">
+                <div class="gift-icon"><i class="fas fa-envelope-open-text"></i></div>
+                <h3>Personalized Messages</h3>
+                <p>Add your heartfelt message and we'll include a premium note card with elegant calligraphy inside every gift box.</p>
+                <button class="btn btn-secondary" onclick="alert('Add a note at checkout!')">Add Personalization</button>
+            </div>
+            
+            <div class="gift-card">
+                <div class="gift-icon"><i class="fas fa-truck"></i></div>
+                <h3>Nationwide Delivery</h3>
+                <p>Timely, careful delivery with detailed unboxing and care instructions for the recipient. Track your gift every step of the way.</p>
+                <a href="/contact" class="btn btn-primary">See Delivery Options</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="gifting-cta">
+    <div class="container">
+        <div class="cta-card">
+            <h2>Corporate & Bulk Gifting</h2>
+            <p>Surprise teams, clients, and partners with sustainable, memorable gifts that grow. Custom branding, bulk pricing, and white-glove service available for corporate orders.</p>
+            <div class="cta-buttons">
+                <a href="/contact" class="btn btn-outline btn-large">Contact Sales</a>
+                <a href="/products" class="btn btn-primary btn-large">Shop All Gifts</a>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache Dashboard - Plant Nursery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .cache-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .cache-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .cache-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .cache-icon {
+            font-size: 2.5rem;
+        }
+        
+        .cache-title {
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 20px;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50px;
+            transition: background 0.3s;
+        }
+        
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Home</a>
+        
+        <h1>🚀 Cache Performance Dashboard</h1>
+        
+        <div class="cache-grid">
+            <!-- Redis Cache Card -->
+            <div class="cache-card">
+                <div class="cache-header">
+                    <span class="cache-icon">⚡</span>
+                    <div>
+                        <div class="cache-title">Redis Cache (Server-Side)</div>
+                    </div>
+                </div>
+                
+                <div id="redis-stats">
+                    <div class="loading">Loading Redis stats...</div>
+                </div>
+                
+                <button class="btn" onclick="refreshRedisStats()">🔄 Refresh Stats</button>
+                <button class="btn" onclick="clearRedisCache()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🧹 Clear Cache</button>
+            </div>
+            
+            <!-- Browser Cache Card -->
+            <div class="cache-card">
+                <div class="cache-header">
+                    <span class="cache-icon">💾</span>
+                    <div>
+                        <div class="cache-title">Browser Cache (localStorage)</div>
+                    </div>
+                </div>
+                
+                <div id="browser-stats">
+                    <div class="loading">Loading browser cache stats...</div>
+                </div>
+                
+                <button class="btn" onclick="refreshBrowserStats()">🔄 Refresh Stats</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Load Redis stats
+        async function loadRedisStats() {
+            try {
+                const response = await fetch('/api/redis/stats');
+                const data = await response.json();
+                
+                const container = document.getElementById('redis-stats');
+                
+                if (data.success) {
+                    const stats = data.data;
+                    container.innerHTML = `
+                        <div class="stat-row">
+                            <span class="stat-label">Status</span>
+                            <span class="stat-value">
+                                <span class="status-badge ${stats.enabled ? 'status-active' : 'status-inactive'}">
+                                    ${stats.enabled ? '✅ Active' : '❌ Inactive'}
+                                </span>
+                            </span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Total Keys</span>
+                            <span class="stat-value">${stats.totalKeys}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Cached Endpoints</span>
+                            <span class="stat-value">${stats.cachedEndpoints}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Cache Hit Rate</span>
+                            <span class="stat-value">${stats.hitRate}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Cache Hits</span>
+                            <span class="stat-value">${stats.cacheHits}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Cache Misses</span>
+                            <span class="stat-value">${stats.cacheMisses}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Expired Keys</span>
+                            <span class="stat-value">${stats.expiredKeys}</span>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="stat-row">
+                            <span class="stat-label">Status</span>
+                            <span class="stat-value">
+                                <span class="status-badge status-inactive">❌ Not Available</span>
+                            </span>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading Redis stats:', error);
+                document.getElementById('redis-stats').innerHTML = `
+                    <div style="color: #d9534f;">Error loading stats: ${error.message}</div>
+                `;
+            }
+        }
+        
+        // Load browser cache stats
+        function loadBrowserStats() {
+            try {
+                const container = document.getElementById('browser-stats');
+                
+                // Check if localStorage is available
+                const supported = typeof(Storage) !== "undefined";
+                
+                if (supported) {
+                    let recentProducts = 0;
+                    let searchHistory = 0;
+                    let cartBackup = 'None';
+                    
+                    try {
+                        const recent = localStorage.getItem('nursery_recent_products');
+                        if (recent) {
+                            const parsed = JSON.parse(recent);
+                            recentProducts = parsed.data ? parsed.data.length : 0;
+                        }
+                    } catch (e) {}
+                    
+                    try {
+                        const search = localStorage.getItem('nursery_search_history');
+                        if (search) {
+                            const parsed = JSON.parse(search);
+                            searchHistory = parsed.data ? parsed.data.length : 0;
+                        }
+                    } catch (e) {}
+                    
+                    try {
+                        const cart = localStorage.getItem('nursery_cart_backup');
+                        if (cart) cartBackup = 'Available';
+                    } catch (e) {}
+                    
+                    const totalKeys = Object.keys(localStorage).filter(k => k.startsWith('nursery_') || k.startsWith('plant-nursery-')).length;
+                    
+                    container.innerHTML = `
+                        <div class="stat-row">
+                            <span class="stat-label">Status</span>
+                            <span class="stat-value">
+                                <span class="status-badge status-active">✅ Active</span>
+                            </span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Total Cache Keys</span>
+                            <span class="stat-value">${totalKeys}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Recent Products</span>
+                            <span class="stat-value">${recentProducts} items</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Search History</span>
+                            <span class="stat-value">${searchHistory} queries</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Cart Backup</span>
+                            <span class="stat-value">${cartBackup}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Storage Used</span>
+                            <span class="stat-value">${(JSON.stringify(localStorage).length / 1024).toFixed(2)} KB</span>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="stat-row">
+                            <span class="stat-label">Status</span>
+                            <span class="stat-value">
+                                <span class="status-badge status-inactive">❌ Not Supported</span>
+                            </span>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading browser stats:', error);
+                document.getElementById('browser-stats').innerHTML = `
+                    <div style="color: #d9534f;">Error loading stats: ${error.message}</div>
+                `;
+            }
+        }
+        
+        // Refresh functions
+        function refreshRedisStats() {
+            document.getElementById('redis-stats').innerHTML = '<div class="loading">Refreshing...</div>';
+            loadRedisStats();
+        }
+        
+        function refreshBrowserStats() {
+            document.getElementById('browser-stats').innerHTML = '<div class="loading">Refreshing...</div>';
+            loadBrowserStats();
+        }
+        
+        // Clear Redis cache
+        async function clearRedisCache() {
+            if (confirm('Are you sure you want to clear Redis cache?')) {
+                try {
+                    const response = await fetch('/api/redis/clear', { method: 'POST' });
+                    const data = await response.json();
+                    alert(data.message);
+                    refreshRedisStats();
+                } catch (error) {
+                    alert('Error clearing cache: ' + error.message);
+                }
+            }
+        }
+        
+        // Load stats on page load
+        loadRedisStats();
+        loadBrowserStats();
+        
+        // Auto-refresh every 10 seconds
+        setInterval(() => {
+            loadRedisStats();
+            loadBrowserStats();
+        }, 10000);
+    </script>
+</body>
+</html>

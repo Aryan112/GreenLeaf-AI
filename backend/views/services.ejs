@@ -1,0 +1,750 @@
+<!-- Services Page Content -->
+<style>
+.care-page-header {
+    background: linear-gradient(135deg, #1e3c1a 0%, #2d5a27 50%, #3d7a33 100%);
+    padding: 150px 20px 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.care-page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(127, 176, 105, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(76, 175, 80, 0.2) 0%, transparent 50%);
+    animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.care-page-header h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 3px 5px 15px rgba(0,0,0,0.4);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.care-page-subtitle {
+    font-size: 1.4rem;
+    color: rgba(255,255,255,0.95);
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .care-page-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .care-page-subtitle {
+        font-size: 1.1rem;
+    }
+}
+</style>
+
+<div class="care-page-header">
+    <div class="container">
+        <h1>🛠️ Our Services</h1>
+        <p class="care-page-subtitle">Complete Plant Care Solutions for Every Need</p>
+    </div>
+</div>
+
+<section class="services-overview">
+    <div class="container">
+        <div class="services-intro glass-morphism animate fade-up delay-3">
+            <h2 class="gradient-text">Professional Plant Services</h2>
+            <p>At PlantNursery, we offer comprehensive services to ensure your plants thrive at every stage of their journey. From consultation to ongoing care, our expert team is here to support your gardening success.</p>
+        </div>
+    </div>
+</section>
+
+<section class="services-grid-section">
+    <div class="container">
+        <div class="services-grid">
+            <!-- Plant Consultation -->
+            <div class="service-card glass-morphism animate fade-up delay-1">
+                <div class="service-icon gradient-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3 class="gradient-text">Plant Consultation</h3>
+                <p class="service-price glowing-text">Starting at ₹499</p>
+                <p>Get personalized advice from our plant experts. We'll help you choose the perfect plants for your space, lighting conditions, and lifestyle.</p>
+                <ul class="service-features">
+                    <li class="animate slide-in delay-2"><i class="fas fa-check"></i> One-on-one consultation</li>
+                    <li class="animate slide-in delay-3"><i class="fas fa-check"></i> Personalized plant recommendations</li>
+                    <li class="animate slide-in delay-4"><i class="fas fa-check"></i> Care instructions and tips</li>
+                    <li class="animate slide-in delay-5"><i class="fas fa-check"></i> Space planning advice</li>
+                </ul>
+                <button class="btn btn-primary service-btn glow-button animate pulse-glow" data-service="consultation">Book Consultation</button>
+            </div>
+
+            <!-- Plant Delivery & Setup -->
+            <div class="service-card featured glass-morphism animate fade-up delay-2">
+                <div class="service-badge gradient-badge">Most Popular</div>
+                <div class="service-icon gradient-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <h3 class="gradient-text">Delivery & Setup</h3>
+                <p class="service-price glowing-text">Starting at ₹299</p>
+                <p>Professional delivery and setup service. We'll bring your plants directly to your door and help set them up in their perfect spots.</p>
+                <ul class="service-features">
+                    <li class="animate slide-in delay-3"><i class="fas fa-check"></i> Same-day delivery available</li>
+                    <li class="animate slide-in delay-4"><i class="fas fa-check"></i> Professional plant placement</li>
+                    <li class="animate slide-in delay-5"><i class="fas fa-check"></i> Initial care instructions</li>
+                    <li class="animate slide-in delay-6"><i class="fas fa-check"></i> Pot and soil setup included</li>
+                </ul>
+                <button class="btn btn-primary service-btn glow-button animate pulse-glow" data-service="delivery">Schedule Delivery</button>
+            </div>
+
+            <!-- Plant Care & Maintenance -->
+            <div class="service-card glass-morphism animate fade-up delay-3">
+                <div class="service-icon gradient-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3 class="gradient-text">Plant Care & Maintenance</h3>
+                <p class="service-price glowing-text">Starting at ₹399/visit</p>
+                <p>Regular maintenance visits to keep your plants healthy and thriving. Perfect for busy professionals or plant enthusiasts who want expert care.</p>
+                <ul class="service-features">
+                    <li class="animate slide-in delay-4"><i class="fas fa-check"></i> Regular watering and feeding</li>
+                    <li class="animate slide-in delay-5"><i class="fas fa-check"></i> Pruning and trimming</li>
+                    <li class="animate slide-in delay-6"><i class="fas fa-check"></i> Pest and disease monitoring</li>
+                    <li class="animate slide-in delay-7"><i class="fas fa-check"></i> Flexible scheduling</li>
+                </ul>
+                <button class="btn btn-primary service-btn glow-button animate pulse-glow" data-service="maintenance">Book Maintenance</button>
+            </div>
+
+            <!-- Plant Health Diagnosis -->
+            <div class="service-card glass-morphism animate fade-up delay-4">
+                <div class="service-icon gradient-icon">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+                <h3 class="gradient-text">Plant Health Diagnosis</h3>
+                <p class="service-price glowing-text">Starting at ₹249</p>
+                <p>Having trouble with a sick plant? Our experts will diagnose the problem and provide treatment recommendations to get your plant back to health.</p>
+                <ul class="service-features">
+                    <li class="animate slide-in delay-5"><i class="fas fa-check"></i> Professional plant diagnosis</li>
+                    <li class="animate slide-in delay-6"><i class="fas fa-check"></i> Treatment recommendations</li>
+                    <li class="animate slide-in delay-7"><i class="fas fa-check"></i> Follow-up support</li>
+                    <li class="animate slide-in delay-8"><i class="fas fa-check"></i> Emergency consultations available</li>
+                </ul>
+                <button class="btn btn-primary service-btn glow-button animate pulse-glow" data-service="diagnosis">Get Diagnosis</button>
+            </div>
+
+            <!-- Garden Design -->
+            <div class="service-card glass-morphism animate fade-up delay-5">
+                <div class="service-icon gradient-icon">
+                    <i class="fas fa-pencil-ruler"></i>
+                </div>
+                <h3 class="gradient-text">Garden Design</h3>
+                <p class="service-price glowing-text">Starting at ₹1999</p>
+                <p>Transform your space with professional garden design. We'll create a custom plan that suits your style, budget, and maintenance preferences.</p>
+                <ul class="service-features">
+                    <li class="animate slide-in delay-6"><i class="fas fa-check"></i> Custom design consultation</li>
+                    <li class="animate slide-in delay-7"><i class="fas fa-check"></i> 3D visualization</li>
+                    <li class="animate slide-in delay-8"><i class="fas fa-check"></i> Plant selection and layout</li>
+                    <li class="animate slide-in delay-9"><i class="fas fa-check"></i> Implementation support</li>
+                </ul>
+                <button class="btn btn-primary service-btn glow-button animate pulse-glow" data-service="design">Start Design</button>
+            </div>
+
+            <!-- Plant Workshops -->
+            <div class="service-card glass-morphism animate fade-up delay-6">
+                <div class="service-icon gradient-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3 class="gradient-text">Plant Care Workshops</h3>
+                <p class="service-price glowing-text">₹349/person</p>
+                <p>Join our hands-on workshops to learn essential plant care skills. Perfect for beginners and anyone looking to expand their plant knowledge.</p>
+                <ul class="service-features">
+                    <li class="animate slide-in delay-7"><i class="fas fa-check"></i> Interactive learning sessions</li>
+                    <li class="animate slide-in delay-8"><i class="fas fa-check"></i> Take-home plant included</li>
+                    <li class="animate slide-in delay-9"><i class="fas fa-check"></i> Expert-led instruction</li>
+                    <li class="animate slide-in delay-10"><i class="fas fa-check"></i> Small group settings</li>
+                </ul>
+                <button class="btn btn-primary service-btn glow-button animate pulse-glow" data-service="workshop">Join Workshop</button>
+            </div>
+
+            <!-- Plant Sitting -->
+            <div class="service-card glass-morphism animate fade-up delay-7">
+                <div class="service-icon gradient-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h3 class="gradient-text">Plant Sitting</h3>
+                <p class="service-price glowing-text">Starting at ₹149/day</p>
+                <p>Going on vacation? We'll take care of your plants while you're away. Our plant sitting service ensures your green friends stay healthy in your absence.</p>
+                <ul class="service-features">
+                    <li class="animate slide-in delay-8"><i class="fas fa-check"></i> Daily plant care</li>
+                    <li class="animate slide-in delay-9"><i class="fas fa-check"></i> Progress photos and updates</li>
+                    <li class="animate slide-in delay-10"><i class="fas fa-check"></i> Emergency care available</li>
+                    <li class="animate slide-in delay-11"><i class="fas fa-check"></i> Flexible duration</li>
+                </ul>
+                <button class="btn btn-primary service-btn glow-button animate pulse-glow" data-service="sitting">Book Plant Sitting</button>
+            </div>
+
+            <!-- Repotting Service -->
+            <div class="service-card glass-morphism animate fade-up delay-8">
+                <div class="service-icon gradient-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h3 class="gradient-text">Repotting Service</h3>
+                <p class="service-price glowing-text">Starting at ₹199</p>
+                <p>Professional repotting service for plants that have outgrown their containers. We'll handle everything from pot selection to soil preparation.</p>
+                <ul class="service-features">
+                    <li class="animate slide-in delay-9"><i class="fas fa-check"></i> Professional repotting</li>
+                    <li class="animate slide-in delay-10"><i class="fas fa-check"></i> Quality soil and pots</li>
+                    <li class="animate slide-in delay-11"><i class="fas fa-check"></i> Root health assessment</li>
+                    <li class="animate slide-in delay-12"><i class="fas fa-check"></i> Post-repotting care guide</li>
+                </ul>
+                <button class="btn btn-primary service-btn glow-button animate pulse-glow" data-service="repotting">Schedule Repotting</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Booking Modal -->
+<div class="service-modal" id="serviceModal">
+    <div class="service-modal-content">
+        <div class="service-modal-header">
+            <h2 id="modalServiceTitle">Book Service</h2>
+            <button class="close-modal" id="closeServiceModal" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="service-modal-body">
+            <form id="serviceBookingForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="customerName">Full Name *</label>
+                        <input type="text" id="customerName" name="customerName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customerEmail">Email Address *</label>
+                        <input type="email" id="customerEmail" name="customerEmail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customerPhone">Phone Number *</label>
+                        <input type="tel" id="customerPhone" name="customerPhone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="preferredDate">Preferred Date *</label>
+                        <input type="date" id="preferredDate" name="preferredDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="preferredTime">Preferred Time *</label>
+                        <select id="preferredTime" name="preferredTime" required>
+                            <option value="">Select a time</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="serviceType">Service Type</label>
+                        <input type="text" id="serviceType" name="serviceType" readonly>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="serviceAddress">Service Address *</label>
+                    <textarea id="serviceAddress" name="serviceAddress" rows="3" placeholder="Please provide your full address where the service will be performed" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="serviceNotes">Additional Notes</label>
+                    <textarea id="serviceNotes" name="serviceNotes" rows="4" placeholder="Any specific requirements or details about your plants/space..."></textarea>
+                </div>
+                
+                <div class="service-modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBooking">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="confirmBooking">Book Service</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<section class="service-guarantee">
+    <div class="container">
+        <h2 class="gradient-text animate fade-up">Our Service Guarantee</h2>
+        <div class="guarantee-grid">
+            <div class="guarantee-item glass-morphism animate fade-up delay-1">
+                <div class="guarantee-icon gradient-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h4 class="gradient-text">100% Satisfaction</h4>
+                <p>We guarantee your satisfaction with all our services. If you're not happy, we'll make it right.</p>
+            </div>
+            
+            <div class="guarantee-item glass-morphism animate fade-up delay-2">
+                <div class="guarantee-icon gradient-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h4 class="gradient-text">Punctual Service</h4>
+                <p>We respect your time. Our team arrives on schedule and completes services efficiently.</p>
+            </div>
+            
+            <div class="guarantee-item glass-morphism animate fade-up delay-3">
+                <div class="guarantee-icon gradient-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h4 class="gradient-text">Insured & Licensed</h4>
+                <p>All our services are fully insured and our team members are certified plant care professionals.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Services Page Hero */
+.services-page-header {
+    background: linear-gradient(135deg, #1e3c1a 0%, #2d5a27 50%, #3d7a33 100%);
+    color: white;
+    padding: 150px 0 100px 0;
+    position: relative;
+    overflow: hidden;
+    animation: gradientShift 15s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.services-page-header h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1rem;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+    animation: fadeInUp 1s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.services-page-header .page-subtitle {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #e8f5e8;
+    font-weight: 300;
+    animation: fadeInUp 1.2s ease;
+}
+
+/* Services Page Styles */
+.services-overview {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e8 100%);
+}
+
+.services-intro {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 3rem;
+    border-radius: 25px;
+    box-shadow: 0 20px 60px rgba(45, 90, 39, 0.15);
+}
+
+.services-intro h2 {
+    color: #2d5a27;
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.services-intro p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+}
+
+.services-grid-section {
+    padding: 4rem 0;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.service-card {
+    background: white;
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.service-card.featured {
+    border-color: var(--accent-color);
+    transform: scale(1.02);
+}
+
+.service-badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.service-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: white;
+    font-size: 2rem;
+}
+
+.service-card h3 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.service-price {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.service-card > p {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.service-features {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.service-features li {
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    color: var(--text-color);
+}
+
+.service-features i {
+    color: var(--secondary-color);
+    margin-right: 0.5rem;
+}
+
+.service-btn {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Service Modal Styles */
+.service-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-modal.active {
+    display: flex;
+}
+
+.service-modal-content {
+    background: white;
+    border-radius: var(--border-radius-lg);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-xl);
+}
+
+.service-modal-header {
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.service-modal-header h2 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.service-modal-body {
+    padding: 2rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--light-gray);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.service-modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+/* Service Guarantee Section */
+.service-guarantee {
+    padding: 4rem 0;
+    background: var(--light-bg);
+}
+
+.service-guarantee h2 {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.guarantee-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.guarantee-item {
+    text-align: center;
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.guarantee-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.guarantee-item h4 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .service-modal-content {
+        width: 95%;
+        margin: 2rem;
+    }
+    
+    .service-modal-header,
+    .service-modal-body {
+        padding: 1.5rem;
+    }
+    
+    .service-modal-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+// Service booking functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceButtons = document.querySelectorAll('.service-btn');
+    const serviceModal = document.getElementById('serviceModal');
+    const closeModalBtn = document.getElementById('closeServiceModal');
+    const cancelBtn = document.getElementById('cancelBooking');
+    const serviceForm = document.getElementById('serviceBookingForm');
+    const modalTitle = document.getElementById('modalServiceTitle');
+    const serviceTypeInput = document.getElementById('serviceType');
+    
+    // Service data mapping
+    const serviceData = {
+        consultation: 'Plant Consultation',
+        delivery: 'Delivery & Setup',
+        maintenance: 'Plant Care & Maintenance',
+        diagnosis: 'Plant Health Diagnosis',
+        design: 'Garden Design',
+        workshop: 'Plant Care Workshop',
+        sitting: 'Plant Sitting',
+        repotting: 'Repotting Service'
+    };
+    
+    // Open service booking modal
+    serviceButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const serviceType = this.getAttribute('data-service');
+            const serviceName = serviceData[serviceType];
+            
+            modalTitle.textContent = `Book ${serviceName}`;
+            serviceTypeInput.value = serviceName;
+            serviceModal.classList.add('active');
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('preferredDate').min = today;
+        });
+    });
+    
+    // Close modal functions
+    function closeModal() {
+        serviceModal.classList.remove('active');
+        serviceForm.reset();
+    }
+    
+    closeModalBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    
+    // Close modal when clicking outside
+    serviceModal.addEventListener('click', function(e) {
+        if (e.target === serviceModal) {
+            closeModal();
+        }
+    });
+    
+    // Handle form submission
+    serviceForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(serviceForm);
+        const bookingData = Object.fromEntries(formData.entries());
+        
+        // Show loading state
+        const submitBtn = document.getElementById('confirmBooking');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Booking...';
+        submitBtn.disabled = true;
+        
+        // Simulate API call
+        fetch('/api/services/book', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(bookingData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success notification
+                showNotification('Service booked successfully! We will contact you soon to confirm the details.', 'success');
+                closeModal();
+            } else {
+                throw new Error(data.message || 'Booking failed');
+            }
+        })
+        .catch(error => {
+            console.error('Booking error:', error);
+            showNotification('Failed to book service. Please try again or contact us directly.', 'error');
+        })
+        .finally(() => {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+});
+</script>

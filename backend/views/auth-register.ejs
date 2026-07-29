@@ -1,0 +1,60 @@
+<section class="auth-section">
+    <div class="auth-card">
+        <div class="auth-illustration">
+            <i class="fas fa-leaf"></i>
+            <h2>Join GreenLeaf</h2>
+            <p>Create your account and start your plant journey.</p>
+        </div>
+        <form id="registerForm" class="auth-form">
+            <h1>Create account</h1>
+            <div class="form-group">
+                <label for="name">Full name</label>
+                <input type="text" id="name" name="name" placeholder="Alex Green" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="At least 6 characters" minlength="6" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-glow btn-large">Create account</button>
+            <p class="auth-switch">Already have an account? <a href="/auth/login">Sign in</a></p>
+        </form>
+    </div>
+    <style>
+        .auth-section{display:grid;place-items:center;min-height:70vh;background:linear-gradient(135deg,#e8f5e9,transparent)}
+        .auth-card{display:grid;grid-template-columns:1fr 1fr;gap:2rem;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.08);overflow:hidden;animation:floatIn .6s ease}
+        .auth-illustration{background:linear-gradient(135deg,#81c784,#43a047);color:#fff;padding:3rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+        .auth-illustration i{font-size:56px;margin-bottom:1rem;animation:leafBounce 2s infinite}
+        .auth-form{padding:2rem 2.5rem;min-width:300px}
+        .auth-form h1{margin-bottom:1rem}
+        .form-group{margin-bottom:1rem}
+        .form-group input{width:100%;padding:0.8rem 1rem;border:1px solid #e0e0e0;border-radius:10px;transition:box-shadow .2s}
+        .form-group input:focus{outline:none;box-shadow:0 0 0 3px rgba(67,160,71,.2)}
+        .auth-switch{margin-top:1rem}
+        @keyframes floatIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes leafBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+        @media(max-width:900px){.auth-card{grid-template-columns:1fr}}
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded',()=>{
+            const form=document.getElementById('registerForm');
+            form.addEventListener('submit',async(e)=>{
+                e.preventDefault();
+                const btn=form.querySelector('button[type="submit"]');
+                const old=btn.innerHTML;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Creating...';btn.disabled=true;
+                try{
+                    const res=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:form.name.value,email:form.email.value,password:form.password.value})});
+                    const data=await res.json();
+                    if(!data.success) throw new Error(data.message||'Registration failed');
+                    window.location.href='/';
+                }catch(err){
+                    if(window.showNotification){showNotification(err.message,'error')}else{alert(err.message)}
+                }finally{btn.innerHTML=old;btn.disabled=false}
+            });
+        });
+    </script>
+</section>
+

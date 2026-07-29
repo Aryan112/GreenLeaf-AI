@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenLeaf Nursery - Premium Plants & Garden Supplies</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- User Dropdown Styling -->
+    <style>
+        .nav-user {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .nav-user i {
+            color: var(--primary-green);
+        }
+        
+        .nav-username {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 180px;
+            padding: 0.5rem 0;
+            margin-top: 0;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .nav-user:hover .dropdown-menu,
+        .dropdown-menu:hover {
+            display: block;
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .dropdown-item:hover {
+            background: #f5f5f5;
+            color: var(--primary-green);
+        }
+        
+        .dropdown-item i {
+            color: var(--primary-green);
+            width: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <div class="nav-logo">
+                <i class="fas fa-leaf"></i>
+                <span>GreenLeaf</span>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search">
+                <input type="text" id="search-input" placeholder="Search plants">
+                <button id="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Navigation Menu -->
+            <div class="nav-menu" id="nav-menu">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/pots" class="nav-link">Pots</a>
+                <a href="/tools" class="nav-link">Tools</a>
+                <a href="/care" class="nav-link">Care</a>
+                <a href="/services" class="nav-link">Services</a>
+                <a href="/contact" class="nav-link">Contact</a>
+            </div>
+
+            <!-- Cart and User Icons -->
+            <div class="nav-icons">
+                <div class="cart-icon" id="cartToggle">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </div>
+                <div class="nav-user-container" id="navUserContainer">
+                    <!-- Will be populated by JavaScript -->
+                    <a href="/auth/login" class="nav-link" id="loginLink">Login</a>
+                </div>
+                
+                <!-- Mobile Menu Toggle -->
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to GreenLeaf Nursery</h1>
+            <p>Discover beautiful plants that bring life to your space</p>
+            <button class="hero-btn">Shop Now</button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Sidebar Filters -->
+            <aside class="sidebar">
+                <div class="filter-section">
+                    <h3>Categories</h3>
+                    <div class="filter-group">
+                        <label class="filter-item">
+                            <input type="checkbox" name="category" value="indoor">
+                            <span class="checkmark"></span>
+                            Indoor Plants
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" name="category" value="outdoor">
+                            <span class="checkmark"></span>
+                            Outdoor Plants
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" name="category" value="flowering">
+                            <span class="checkmark"></span>
+                            Flowering Plants
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" name="category" value="succulent">
+                            <span class="checkmark"></span>
+                            Succulents
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Price Range</h3>
+                    <div class="price-filter">
+                        <input type="range" id="price-range" min="0" max="200" value="100">
+                        <div class="price-labels">
+                            <span>₹0</span>
+                            <span id="price-value">₹100</span>
+                            <span>₹200</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Size</h3>
+                    <div class="filter-group">
+                        <label class="filter-item">
+                            <input type="radio" name="size" value="small">
+                            <span class="radiomark"></span>
+                            Small (0-1 ft)
+                        </label>
+                        <label class="filter-item">
+                            <input type="radio" name="size" value="medium">
+                            <span class="radiomark"></span>
+                            Medium (1-3 ft)
+                        </label>
+                        <label class="filter-item">
+                            <input type="radio" name="size" value="large">
+                            <span class="radiomark"></span>
+                            Large (3+ ft)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Care Level</h3>
+                    <div class="filter-group">
+                        <label class="filter-item">
+                            <input type="checkbox" name="care" value="easy">
+                            <span class="checkmark"></span>
+                            Easy Care
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" name="care" value="moderate">
+                            <span class="checkmark"></span>
+                            Moderate Care
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" name="care" value="expert">
+                            <span class="checkmark"></span>
+                            Expert Care
+                        </label>
+                    </div>
+                </div>
+
+                <button class="clear-filters-btn">Clear All Filters</button>
+            </aside>
+
+            <!-- Products Section -->
+            <section class="products-section">
+
+    <!-- AI Recommendation Box -->
+<div class="ai-recommendation">
+
+    <h2>🤖 GreenLeaf AI Assistant</h2>
+
+    <p>
+        Tell us what kind of plant you're looking for.
+    </p>
+
+    <!-- Chat History -->
+    <div class="ai-chat-history" id="ai-chat-history">
+
+        <div class="ai-message">
+
+            <div class="ai-avatar">
+                🤖
+            </div>
+
+            <div class="ai-bubble">
+                Hello! 👋 <br>
+                Tell me what kind of plant you're looking for.
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Search Box -->
+    <div class="ai-search-box">
+
+        <input
+            type="text"
+            id="ai-query"
+            placeholder="Example: I need a small indoor plant under ₹500"
+        >
+
+        <button id="ai-search-btn">
+            🌱 Find My Plant
+        </button>
+
+    </div>
+
+    <!-- Suggested Prompts -->
+    <div class="ai-suggestions">
+
+        <button class="suggestion-chip">
+            🌿 Indoor Plants
+        </button>
+
+        <button class="suggestion-chip">
+            🌵 Low Maintenance
+        </button>
+
+        <button class="suggestion-chip">
+            💰 Under ₹500
+        </button>
+
+        <button class="suggestion-chip">
+            🏡 Office Plants
+        </button>
+
+    </div>
+
+</div>
+
+    <!-- Products Header -->
+    <div class="products-header">
+                <!-- Products Header -->
+                <div class="products-header">
+                    <div class="results-info">
+                        <h2>Our Plants</h2>
+                        <span class="results-count" id="results-count">Showing 1-12 of 120 products</span>
+                    </div>
+                    
+                    <!-- Sort Options -->
+                    <div class="sort-options">
+                        <label for="sort-select">Sort by:</label>
+                        <select id="sort-select">
+                            <option value="featured">Featured</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="name">Name A-Z</option>
+                            <option value="rating">Customer Rating</option>
+                        </select>
+                    </div>
+
+                    <!-- View Toggle -->
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="products-grid" id="products-grid">
+                    <!-- Product cards will be dynamically inserted here -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="page-btn" id="prev-page" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="page-numbers" id="page-numbers">
+                        <button class="page-num active">1</button>
+                        <button class="page-num">2</button>
+                        <button class="page-num">3</button>
+                        <button class="page-num">...</button>
+                        <button class="page-num">10</button>
+                    </div>
+                    
+                    <button class="page-btn" id="next-page">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-modal-content">
+            <div class="cart-header">
+                <h2>Shopping Cart</h2>
+                <button class="close-cart" id="close-cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be dynamically inserted here -->
+            </div>
+            
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Total: $<span id="cart-total">0.00</span></strong>
+                </div>
+                <div class="cart-actions">
+                    <button class="continue-shopping">Continue Shopping</button>
+                    <button class="checkout-btn">Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Quick View Modal -->
+    <div class="quick-view-modal" id="quick-view-modal">
+        <div class="quick-view-content">
+            <button class="close-quick-view" id="close-quick-view">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="quick-view-body">
+                <div class="quick-view-image">
+                    <img id="quick-view-img" src="" alt="">
+                </div>
+                
+                <div class="quick-view-details">
+                    <h2 id="quick-view-title"></h2>
+                    <div class="quick-view-rating">
+                        <div class="stars" id="quick-view-stars"></div>
+                        <span id="quick-view-reviews"></span>
+                    </div>
+                    <p class="quick-view-price" id="quick-view-price"></p>
+                    <p class="quick-view-description" id="quick-view-description"></p>
+                    
+                    <div class="quantity-selector">
+                        <label>Quantity:</label>
+                        <div class="quantity-controls">
+                            <button class="qty-btn minus">-</button>
+                            <input type="number" class="qty-input" value="1" min="1">
+                            <button class="qty-btn plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <button class="add-to-cart-btn quick-view-add">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <i class="fas fa-leaf"></i>
+                    <span>GreenLeaf Nursery</span>
+                </div>
+                <p>Your trusted partner in creating beautiful, green spaces. Quality plants and expert care advice.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Plant Care</a></li>
+                    <li><a href="#">Delivery Info</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="#">Indoor Plants</a></li>
+                    <li><a href="#">Outdoor Plants</a></li>
+                    <li><a href="#">Flowering Plants</a></li>
+                    <li><a href="#">Succulents</a></li>
+                    <li><a href="#">Garden Tools</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Garden Street, Plant City, PC 12345</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@greenleafnursery.com</p>
+                </div>
+                
+                <div class="newsletter">
+                    <h4>Subscribe to Newsletter</h4>
+                    <form id="newsletterForm" class="newsletter-form">
+                        <input type="email" id="newsletterEmail" name="email" placeholder="Enter your email" required>
+                        <button type="submit" id="newsletterSubscribe">Subscribe</button>
+                    </form>
+                    <div id="newsletter-message" class="newsletter-message" style="display: none; margin-top: 0.5rem; font-size: 0.9rem;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 GreenLeaf Nursery. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/newsletter.js"></script>
+    
+    <!-- User Authentication Display -->
+    <script>
+        // Fetch and display user info
+        async function loadUserInfo() {
+            try {
+                const response = await fetch('/api/auth/check-session');
+                const data = await response.json();
+                
+                const navUserContainer = document.getElementById('navUserContainer');
+                
+                if (data.authenticated && data.user) {
+                    // User is logged in - show dropdown
+                    const firstName = data.user.name.split(' ')[0];
+                    navUserContainer.innerHTML = `
+                        <div class="nav-user dropdown">
+                            <i class="fas fa-user"></i>
+                            <span class="nav-username">${firstName}</span>
+                            <div class="dropdown-menu">
+                                <a href="/orders" class="dropdown-item">
+                                    <i class="fas fa-shopping-bag"></i> My Orders
+                                </a>
+                                <button id="logoutBtn" class="dropdown-item">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add logout functionality
+                    document.getElementById('logoutBtn').addEventListener('click', async () => {
+                        try {
+                            await fetch('/api/auth/logout', { method: 'POST' });
+                            window.location.href = '/';
+                        } catch (error) {
+                            console.error('Logout error:', error);
+                        }
+                    });
+                } else {
+                    // User not logged in - show login link
+                    navUserContainer.innerHTML = `
+                        <a href="/auth/login" class="nav-link">Login</a>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading user info:', error);
+                // Default to login link on error
+                document.getElementById('navUserContainer').innerHTML = `
+                    <a href="/auth/login" class="nav-link">Login</a>
+                `;
+            }
+        }
+        
+        // Load user info when page loads
+        document.addEventListener('DOMContentLoaded', loadUserInfo);
+    </script>
+    
+    <!-- Hamburger Menu Toggle Script -->
+    <script>
+        // Hamburger menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', function() {
+                    // Toggle active class on both elements
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                    
+                    // Prevent body scroll when menu is open
+                    if (navMenu.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+                
+                // Close menu when clicking on a nav link
+                const navLinks = document.querySelectorAll('.nav-menu .nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!navMenu.contains(event.target) && !hamburger.contains(event.target)) {
+                        if (navMenu.classList.contains('active')) {
+                            hamburger.classList.remove('active');
+                            navMenu.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

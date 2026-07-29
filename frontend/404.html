@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | PlantNursery</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error-icon {
+            font-size: 8rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            animation: bounce 2s infinite;
+        }
+        
+        .error-title {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .error-title {
+                font-size: 3rem;
+            }
+            
+            .error-icon {
+                font-size: 6rem;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/">
+                    <i class="fas fa-leaf"></i>
+                    <span>PlantNursery</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/products" class="nav-link">
+                        <i class="fas fa-seedling"></i> Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/categories" class="nav-link">
+                        <i class="fas fa-list"></i> Categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/about" class="nav-link">
+                        <i class="fas fa-info-circle"></i> About
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/contact" class="nav-link">
+                        <i class="fas fa-envelope"></i> Contact
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="nav-icons">
+                <button class="nav-icon" id="searchToggle" aria-label="Toggle search">
+                    <i class="fas fa-search"></i>
+                </button>
+                
+                <button class="nav-icon cart-icon" id="cartToggle" aria-label="View cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Error Content -->
+    <main class="error-container">
+        <div class="error-icon">
+            <i class="fas fa-seedling"></i>
+        </div>
+        
+        <h1 class="error-title">404</h1>
+        
+        <p class="error-message">
+            Oops! This page seems to have grown in a different garden. 
+            The page you're looking for doesn't exist or may have been moved.
+        </p>
+        
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-home"></i> Go Home
+            </a>
+            
+            <a href="/products" class="btn btn-secondary">
+                <i class="fas fa-seedling"></i> Browse Products
+            </a>
+            
+            <button onclick="window.history.back()" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Go Back
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2025 PlantNursery. All rights reserved.</p>
+                    <div class="footer-links">
+                        <a href="/">Home</a>
+                        <a href="/contact">Contact</a>
+                        <a href="/privacy">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/js/main.js"></script>
+</body>
+</html>
