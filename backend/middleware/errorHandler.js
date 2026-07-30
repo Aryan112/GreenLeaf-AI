@@ -17,10 +17,18 @@
  */
 const errorHandler = (error, req, res, next) => {
     // Log the error for debugging
-    console.error('💥 Error occurred:');
-    console.error('   Path:', req.method, req.originalUrl);
-    console.error('   Error:', error.message);
-    console.error('   Stack:', error.stack);
+    console.error("======================================");
+    console.error("💥 Error occurred");
+    console.error("Path:", req.method, req.originalUrl);
+    console.error("Message:", error.message);
+
+if (error.response) {
+    console.error("Status:", error.response.status);
+    console.error("Response Data:", error.response.data);
+}
+
+console.error("Stack:", error.stack);
+console.error("======================================");
     
     // Set default error status and message
     let statusCode = error.statusCode || 500; // Internal Server Error

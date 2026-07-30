@@ -304,12 +304,26 @@ router.post(
     }
 
     // Call FastAPI
-   const aiResponse = await axios.post(
+   // Call FastAPI
+console.log("AI_SERVICE_URL:", process.env.AI_SERVICE_URL);
+
+const aiResponse = await axios.post(
     `${process.env.AI_SERVICE_URL}/recommend`,
-    { query }
+    { query },
+    {
+        timeout: 30000,
+    }
 );
 
+console.log("AI Response:", aiResponse.data);
+
 const filters = aiResponse.data;
+
+console.log("Filters:", filters);
+
+if (!filters || typeof filters !== "object") {
+    throw new Error("Invalid response received from AI service");
+}
 
 const products = await getFilteredProducts({
     ...filters,
