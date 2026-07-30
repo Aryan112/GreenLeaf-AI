@@ -82,9 +82,9 @@ Return ONLY the JSON object.
 
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash-preview",
-            contents=prompt
-        )
+    model="gemini-2.5-flash",
+    contents=prompt
+)
 
         text = response.text.strip()
         text = text.replace("```json", "").replace("```", "").strip()
