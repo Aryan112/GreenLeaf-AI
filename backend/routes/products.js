@@ -304,8 +304,8 @@ router.post(
     }
 
     // Call FastAPI
-    const aiResponse = await axios.post(
-    "http://127.0.0.1:8000/recommend",
+   const aiResponse = await axios.post(
+    `${process.env.AI_SERVICE_URL}/recommend`,
     { query }
 );
 
