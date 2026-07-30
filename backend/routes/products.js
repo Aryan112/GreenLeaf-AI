@@ -315,15 +315,13 @@ const aiResponse = await axios.post(
     }
 );
 
-console.log("AI Response:", aiResponse.data);
+console.log("========== AI RESPONSE ==========");
+console.log(aiResponse.data);
 
 const filters = aiResponse.data;
 
-console.log("Filters:", filters);
-
-if (!filters || typeof filters !== "object") {
-    throw new Error("Invalid response received from AI service");
-}
+console.log("========== FILTERS ==========");
+console.log(filters);
 
 const products = await getFilteredProducts({
     ...filters,
@@ -331,11 +329,10 @@ const products = await getFilteredProducts({
     limit: 20,
 });
 
-console.log("Filters:", filters);
-console.log("Products Length:", products.length);
-console.log(products);
+console.log("========== PRODUCTS ==========");
+console.log(products.length);
 
-res.json({
+return res.json({
     success: true,
     filters,
     products,
