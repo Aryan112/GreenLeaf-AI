@@ -5,14 +5,12 @@ from models.schemas import (
     RecommendationResponse,
 )
 
-from services.openai_service import extract_preferences
+from services.recommendation_engine import get_ai_recommendation
 
 router = APIRouter()
 
 
-@router.post("/recommend")
+@router.post("/recommend", response_model=RecommendationResponse)
 def recommend(request: RecommendationRequest):
-
-    result = extract_preferences(request.query)
-
+    result = get_ai_recommendation(request.query)
     return result

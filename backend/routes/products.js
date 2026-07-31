@@ -318,13 +318,14 @@ const aiResponse = await axios.post(
 console.log("========== AI RESPONSE ==========");
 console.log(aiResponse.data);
 
-const filters = aiResponse.data;
+const aiResult = aiResponse.data;
 
-console.log("========== FILTERS ==========");
-console.log(filters);
+console.log("========== AI RESULT ==========");
+console.log(aiResult);
 
 const products = await getFilteredProducts({
-    ...filters,
+    ...aiResult.filters,
+    recommended_plants: aiResult.recommended_plants,
     page: 1,
     limit: 20,
 });
@@ -334,7 +335,7 @@ console.log(products.length);
 
 return res.json({
     success: true,
-    filters,
+    ai: aiResult,
     products,
 });
   })

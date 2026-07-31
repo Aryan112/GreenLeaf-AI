@@ -12,11 +12,19 @@ async function getFilteredProducts(filters) {
     sort = "popular",
     page = 1,
     limit = 12,
-  } = filters;
+    recommended_plants = []
+} = filters;
 
   let query = "SELECT * FROM products WHERE 1=1";
   const values = [];
   let i = 1;
+  if (recommended_plants.length > 0) {
+    query += ` AND LOWER(name) = ANY($${i++})`;
+
+    values.push(
+        recommended_plants.map(name => name.toLowerCase())
+    );
+}
 
   if (category && category !== "all") {
     query += ` AND LOWER(category)=LOWER($${i++})`;
