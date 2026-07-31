@@ -12,58 +12,69 @@ async function getFilteredProducts(filters) {
     sort = "popular",
     page = 1,
     limit = 12,
-    recommended_plants = []
-} = filters;
+    recommended_plants = [],
+  } = filters;
 
   let query = "SELECT * FROM products WHERE 1=1";
   const values = [];
   let i = 1;
+
+  // ==========================
+  // AI Recommendation Search
+  // ==========================
   if (recommended_plants.length > 0) {
     query += ` AND LOWER(name) = ANY($${i++})`;
 
     values.push(
-        recommended_plants.map(name => name.toLowerCase())
+      recommended_plants.map((plant) => plant.toLowerCase())
     );
-}
+  } else {
+    // ==========================
+    // Normal Filter Search
+    // ==========================
 
-  if (category && category !== "all") {
-    query += ` AND LOWER(category)=LOWER($${i++})`;
-    values.push(category);
+    if (category && category !== "all") {
+      query += ` AND LOWER(category)=LOWER($${i++})`;
+      values.push(category);
+    }
+
+    if (care && care !== "all") {
+      query += ` AND LOWER(care)=LOWER($${i++})`;
+      values.push(care);
+    }
+
+    if (size && size !== "all") {
+      query += ` AND LOWER(size)=LOWER($${i++})`;
+      values.push(size);
+    }
+
+    if (minPrice) {
+      query += ` AND price >= $${i++}`;
+      values.push(parseFloat(minPrice));
+    }
+
+    if (maxPrice) {
+      query += ` AND price <= $${i++}`;
+      values.push(parseFloat(maxPrice));
+    }
+
+    if (inStock === true || inStock === "true") {
+      query += " AND instock = true";
+    }
+
+    if (search) {
+      query += ` AND (
+        LOWER(name) LIKE LOWER($${i})
+        OR LOWER(description) LIKE LOWER($${i})
+      )`;
+      values.push(`%${search}%`);
+      i++;
+    }
   }
 
-  if (care && care !== "all") {
-    query += ` AND LOWER(care)=LOWER($${i++})`;
-    values.push(care);
-}
-
-  if (size && size !== "all") {
-    query += ` AND LOWER(size)=LOWER($${i++})`;
-    values.push(size);
-  }
-
-  if (minPrice) {
-    query += ` AND price >= $${i++}`;
-    values.push(parseFloat(minPrice));
-  }
-
-  if (maxPrice) {
-    query += ` AND price <= $${i++}`;
-    values.push(parseFloat(maxPrice));
-  }
-
-  if (inStock === true || inStock === "true") {
-    query += " AND instock = true";
-  }
-
-  if (search) {
-    query += ` AND (
-      LOWER(name) LIKE LOWER($${i})
-      OR LOWER(description) LIKE LOWER($${i})
-    )`;
-    values.push(`%${search}%`);
-    i++;
-  }
-
+  // ==========================
+  // Sorting
+  // ==========================
   switch (sort) {
     case "price-low":
       query += " ORDER BY price ASC";
@@ -89,8 +100,8 @@ async function getFilteredProducts(filters) {
       query += " ORDER BY id ASC";
   }
 
-  const offset = (page - 1) * limit;
-
+  // Optional Pagination
+  // const offset = (page - 1) * limit;
   // query += ` LIMIT ${limit} OFFSET ${offset}`;
 
   const result = await pool.query(query, values);
