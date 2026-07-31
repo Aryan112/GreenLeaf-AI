@@ -306,15 +306,22 @@ router.post(
     // Call FastAPI
    // Call FastAPI
 console.log("AI_SERVICE_URL:", process.env.AI_SERVICE_URL);
+const plantResult = await pool.query(`
+  SELECT name, category, care, description
+  FROM products
+  WHERE category IN ('indoor', 'outdoor', 'flowering', 'succulent')
+`);
 
 const aiResponse = await axios.post(
     `${process.env.AI_SERVICE_URL}/recommend`,
-    { query },
+    {
+        query,
+        plants: plantResult.rows
+    },
     {
         timeout: 30000,
     }
 );
-
 console.log("========== AI RESPONSE ==========");
 console.log(aiResponse.data);
 

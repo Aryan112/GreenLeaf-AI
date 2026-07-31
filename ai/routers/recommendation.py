@@ -12,5 +12,8 @@ router = APIRouter()
 
 @router.post("/recommend", response_model=RecommendationResponse)
 def recommend(request: RecommendationRequest):
-    result = get_ai_recommendation(request.query)
+    result = get_ai_recommendation(
+    request.query,
+    request.plants
+)
     return result

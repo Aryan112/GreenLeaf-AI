@@ -8,7 +8,7 @@ from services.prompt_builder import build_recommendation_prompt
 from services.response_builder import build_response
 
 
-def get_ai_recommendation(user_query: str) -> dict:
+def get_ai_recommendation(user_query: str, plants: list) -> dict:
     """
     Main AI recommendation pipeline.
 
@@ -23,7 +23,10 @@ def get_ai_recommendation(user_query: str) -> dict:
     Response Builder
     """
 
-    prompt = build_recommendation_prompt(user_query)
+    prompt = build_recommendation_prompt(
+    user_query,
+    plants
+)
 
     raw_response = generate_text(prompt)
 

@@ -1,8 +1,15 @@
 from pydantic import BaseModel
 
+class Plant(BaseModel):
+    name: str
+    category: str
+    care: str
+    description: str
+
 
 class RecommendationRequest(BaseModel):
     query: str
+    plants: list[Plant]
 
 
 class Filters(BaseModel):

@@ -1,52 +1,42 @@
 import json
-from knowledge.plants import PLANT_KNOWLEDGE
 
 
-def format_plant_knowledge():
-    knowledge = []
-
-    for plant in PLANT_KNOWLEDGE:
-        knowledge.append(
-            f"""
-Plant:
-Name: {plant['name']}
-Category: {plant['category']}
-Care: {plant['care']}
-Light: {plant['light']}
-Watering: {plant['watering']}
-Pet Safe: {plant['pet_safe']}
-Best For: {", ".join(plant['best_for'])}
-"""
-        )
-
-    return "\n".join(knowledge)
-
-
-
-def build_recommendation_prompt(user_query: str) -> str:
+def build_recommendation_prompt(user_query: str, plants: list) -> str:
     schema = {
-    "intent": "recommend_plants",
+        "intent": "recommend_plants",
 
-    "recommended_plants": [],
+        "recommended_plants": [],
 
-    "filters": {
-        "category": "",
-        "care": "",
-        "size": "",
-        "minPrice": "",
-        "maxPrice": "",
-        "search": ""
-    },
+        "filters": {
+            "category": "",
+            "care": "",
+            "size": "",
+            "minPrice": "",
+            "maxPrice": "",
+            "search": ""
+        },
 
-    "reasoning": {
-        "title": "",
-        "message": ""
-    },
+        "reasoning": {
+            "title": "",
+            "message": ""
+        },
 
-    "confidence": 0,
+        "confidence": 0,
 
-    "follow_up": []
-}
+        "follow_up": []
+    }
+
+    # Build available plants from database
+    available_plants = ""
+
+    for plant in plants:
+        available_plants += f"""
+Name: {plant.name}
+Category: {plant.category}
+Care: {plant.care}
+Description: {plant.description}
+
+"""
 
     return f"""
 You are GreenLeaf AI, an expert horticulturist and intelligent plant recommendation assistant.
@@ -111,6 +101,32 @@ Below 60
 Not enough information.
 
 -------------------------
+Available Plants
+-------------------------
+
+{available_plants}
+
+You MUST recommend ONLY from the plants listed above.
+
+For broad requests like:
+- indoor plants
+- flowering plants
+- succulents
+
+Return between 4 and 6 matching plant names.
+
+For personal requests like:
+- beginner
+- office
+- low light
+- busy lifestyle
+- bedroom
+
+Return the best 2 to 4 matching plants.
+
+Never invent plant names.
+
+-------------------------
 Output Rules
 -------------------------
 
@@ -123,19 +139,6 @@ Never return explanations.
 Never wrap JSON inside ```.
 
 Use exactly this schema:
-In addition to filters, recommend the best matching plant names.
-
-Use ONLY plant names from the Available Plants section.
-
-Return them inside:
-
-"recommended_plants": [
-    "Snake Plant",
-    "ZZ Plant"
-]
-
-Never invent plant names.
-Never recommend plants that are not listed.
 
 {json.dumps(schema, indent=4)}
 
