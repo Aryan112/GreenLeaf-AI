@@ -1,10 +1,12 @@
 from pydantic import BaseModel
 
+from typing import Optional
+
 class Plant(BaseModel):
     name: str
     category: str
-    care: str
-    description: str
+    care: Optional[str] = ""
+    description: Optional[str] = ""
 
 
 class RecommendationRequest(BaseModel):

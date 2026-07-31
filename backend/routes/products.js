@@ -311,12 +311,18 @@ const plantResult = await pool.query(`
   FROM products
   WHERE category IN ('indoor', 'outdoor', 'flowering', 'succulent')
 `);
+console.log(plantResult.rows);
 
 const aiResponse = await axios.post(
     `${process.env.AI_SERVICE_URL}/recommend`,
     {
         query,
-        plants: plantResult.rows
+        plants: plantResult.rows.map(p => ({
+    name: p.name || "",
+    category: p.category || "",
+    care: p.care || "",
+    description: p.description || ""
+}))
     },
     {
         timeout: 30000,
