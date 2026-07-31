@@ -61,26 +61,84 @@ Rules:
 - If they mention a maximum price, fill maxPrice.
 - If no filter applies, leave fields empty.
 
-Return ONLY the JSON.
+Return ONLY the JSON object.
 """
-try:
-    print("User Query:", query)
 
-    response = client.models.generate_content(
-        model="gemini-3.5-flash",
-        contents=prompt
-    )
+    try:
+        print("User Query:", query)
 
-    print("Gemini Response:")
-    print(response.text)
+        response = client.models.generate_content(
+            model="gemini-3.5-flash",
+            contents=prompt
+        )
 
-    text = response.text.strip()
-    text = text.replace("```json", "").replace("```", "").strip()
+        print("Gemini Response:")
+        print(response.text)
 
-    match = re.search(r"\{.*\}", text, re.DOTALL)
+        text = response.text.strip()
+        text = text.replace("```json", "").replace("```", "").strip()
 
-    if match:
-        return json.loads(match.group())
+        match = re.search(r"\{.*\}", text, re.DOTALL)
 
-except Exception as e:
-    print("Gemini Error:", e)
+        if match:
+            return json.loads(match.group())
+
+    except Exception as e:
+        print("Gemini Error:", e)
+
+    # -------------------------
+    # Fallback
+    # -------------------------
+
+    q = query.lower()
+
+    filters = {
+        "category": "",
+        "care": "",
+        "size": "",
+        "minPrice": "",
+        "maxPrice": "",
+        "search": ""
+    }
+
+    # Price filters
+    above = re.search(r"(above|over|greater than|more than)\s+(\d+)", q)
+    if above:
+        filters["minPrice"] = above.group(2)
+
+    below = re.search(r"(below|under|less than)\s+(\d+)", q)
+    if below:
+        filters["maxPrice"] = below.group(2)
+
+    # Category
+    if "indoor" in q:
+        filters["category"] = "indoor"
+    elif "outdoor" in q:
+        filters["category"] = "outdoor"
+    elif "flower" in q:
+        filters["category"] = "flowering"
+    elif "succulent" in q:
+        filters["category"] = "succulent"
+
+    # Care
+    if any(word in q for word in [
+        "travel",
+        "less water",
+        "low water",
+        "don't water",
+        "does not need water",
+        "no water",
+        "easy",
+        "low maintenance"
+    ]):
+        filters["care"] = "low"
+
+    # Size
+    if "small" in q:
+        filters["size"] = "small"
+    elif "medium" in q:
+        filters["size"] = "medium"
+    elif "large" in q:
+        filters["size"] = "large"
+
+    return filters
