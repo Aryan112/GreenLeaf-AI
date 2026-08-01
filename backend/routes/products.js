@@ -331,16 +331,22 @@ const aiResponse = await axios.post(
 console.log("========== AI RESPONSE ==========");
 console.log(aiResponse.data);
 
-const aiResult = aiResponse.data;
+let recommendedPlants = aiResult.recommended_plants;
 
-console.log("========== AI RESULT ==========");
-console.log(aiResult);
+if (
+    aiResult.filters.category &&
+    !aiResult.filters.care &&
+    !aiResult.filters.search &&
+    recommendedPlants.length <= 5
+) {
+    recommendedPlants = [];
+}
 
 const products = await getFilteredProducts({
     ...aiResult.filters,
-    recommended_plants: aiResult.recommended_plants,
+    recommended_plants: recommendedPlants,
     page: 1,
-    limit: 20,
+    limit: 100,
 });
 
 console.log("========== PRODUCTS ==========");
