@@ -113,6 +113,7 @@ app.use("/api/", limiter);
 /* -------------------- Static + View Engine -------------------- */
 const frontendPath = path.join(__dirname, "..", "frontend");
 app.use(express.static(frontendPath));
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 console.log(`📁 Serving static files from: ${frontendPath}`);
 
 // Disable ETags for development to prevent 304 caching
