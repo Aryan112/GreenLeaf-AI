@@ -3,28 +3,28 @@ import json
 
 def build_recommendation_prompt(user_query: str, plants: list) -> str:
     schema = {
-        "intent": "recommend_plants",
+    "intent": "",
 
-        "recommended_plants": [],
+    "recommended_plants": [],
 
-        "filters": {
-            "category": "",
-            "care": "",
-            "size": "",
-            "minPrice": "",
-            "maxPrice": "",
-            "search": ""
-        },
+    "filters": {
+        "category": "",
+        "care": "",
+        "size": "",
+        "minPrice": "",
+        "maxPrice": "",
+        "search": ""
+    },
 
-        "reasoning": {
-            "title": "",
-            "message": ""
-        },
+    "reasoning": {
+        "title": "",
+        "message": ""
+    },
 
-        "confidence": 0,
+    "confidence": 0,
 
-        "follow_up": []
-    }
+    "follow_up": []
+}
 
     # Build available plants from database
     available_plants = ""
@@ -41,9 +41,50 @@ Description: {plant.description}
     return f"""
 You are GreenLeaf AI, an expert horticulturist and intelligent plant recommendation assistant.
 
-Your mission is NOT just to extract filters.
+Your mission is to first understand the user's intent.
 
-Your mission is to understand the user's lifestyle and recommend the most suitable plants.
+There are four possible intents:
+
+1. browse_all
+The user wants to browse every available plant.
+
+Examples:
+- show all plants
+- show me all plants
+- display all plants
+- list every plant
+- what plants do you have
+- show your catalogue
+
+2. browse_category
+The user wants every plant from a category.
+
+Examples:
+- indoor plants
+- outdoor plants
+- flowering plants
+- succulents
+
+3. browse_filtered
+The user wants every plant matching filters.
+
+Examples:
+- indoor plants under ₹500
+- low maintenance indoor plants
+- medium flowering plants
+- office plants below ₹1000
+
+4. recommend_plants
+The user wants advice or recommendations.
+
+Examples:
+- recommend a plant for my bedroom
+- best plant for office
+- plant for beginners
+- pet friendly plant
+- plant that purifies air
+
+Always choose exactly ONE intent.
 
 -------------------------
 Think like a plant expert.
@@ -108,12 +149,26 @@ Available Plants
 
 You MUST recommend ONLY from the plants listed above.
 
-For broad requests like:
-- indoor plants
-- flowering plants
-- succulents
+Intent Rules
 
-Return between 4 and 6 matching plant names.
+If intent is browse_all
+
+- recommended_plants MUST be an empty array.
+
+If intent is browse_category
+
+- recommended_plants MUST be an empty array.
+- Fill the category filter.
+
+If intent is browse_filtered
+
+- recommended_plants MUST be an empty array.
+- Fill every matching filter.
+
+If intent is recommend_plants
+
+- Recommend only plants from the Available Plants list.
+- Return between 3 and 7 plant names.
 
 For personal requests like:
 - beginner

@@ -336,25 +336,35 @@ const aiResult = aiResponse.data;
 
 console.log(aiResult);
 
-let recommendedPlants = aiResult.recommended_plants;
+let products;
 
-if (
-    aiResult.filters.category &&
-    !aiResult.filters.care &&
-    !aiResult.filters.size &&
-    !aiResult.filters.minPrice &&
-    !aiResult.filters.maxPrice &&
-    !aiResult.filters.search
-) {
-    recommendedPlants = [];
+switch (aiResult.intent) {
+
+case "browse_all":
+    products = await getFilteredProducts({
+        page: 1,
+        limit: 1000,
+    });
+    break;
+
+case "browse_category":
+case "browse_filtered":
+    products = await getFilteredProducts({
+        ...aiResult.filters,
+        page: 1,
+        limit: 1000,
+    });
+    break;
+
+case "recommend_plants":
+default:
+    products = await getFilteredProducts({
+        ...aiResult.filters,
+        recommended_plants: aiResult.recommended_plants,
+        page: 1,
+        limit: 20,
+    });
 }
-
-const products = await getFilteredProducts({
-    ...aiResult.filters,
-    recommended_plants: recommendedPlants,
-    page: 1,
-    limit: 100,
-});
 
 console.log("========== PRODUCTS ==========");
 console.log(products.length);
