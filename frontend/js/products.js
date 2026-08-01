@@ -15,7 +15,7 @@ async function fetchProducts() {
   try {
     console.log('🔄 Fetching products from API...');
     // Fetch maximum allowed products (100 is the limit)
-    const response = await fetch('/api/products?limit=100');
+    const response = await fetch('/api/products?limit=1000');
     const data = await response.json();
     console.log(data);
     console.log(Array.isArray(data.data.products));
@@ -27,6 +27,17 @@ async function fetchProducts() {
       const onlyPlants = allProducts.filter(product => 
         plantCategories.includes(product.category.toLowerCase())
       );
+      console.log("Total API products:", allProducts.length);
+
+console.log(
+    "Indoor:",
+    allProducts.filter(p => p.category === "indoor").length
+);
+
+console.log(
+    "Categories:",
+    [...new Set(allProducts.map(p => p.category))]
+);
       
       sampleProducts = onlyPlants;
       currentProducts = [...sampleProducts];

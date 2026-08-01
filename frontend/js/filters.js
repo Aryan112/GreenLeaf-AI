@@ -94,7 +94,7 @@ function loadFiltersFromURL() {
   const params = new URLSearchParams(window.location.search);
   const cat = params.get('categories');
   if (cat) activeFilters.categories = cat.split(',');
-  const maxPrice = parseInt(params.get('maxPrice')) || 500;
+  const maxPrice = parseInt(params.get('maxPrice')) || Number.MAX_SAFE_INTEGER;
   activeFilters.priceRange.max = maxPrice;
   applyFilters();
 }

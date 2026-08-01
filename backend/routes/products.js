@@ -28,7 +28,7 @@ router.get(
     query("search").optional().isLength({ min: 1, max: 100 }),
     query("sort").optional().isIn(["price-low", "price-high", "rating", "name", "newest", "popular"]),
     query("page").optional().isInt({ min: 1 }),
-    query("limit").optional().isInt({ min: 1, max: 100 }),
+    query("limit").optional().isInt({ min: 1, max: 1000 }),
   ],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
