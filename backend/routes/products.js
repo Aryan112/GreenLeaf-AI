@@ -331,13 +331,20 @@ const aiResponse = await axios.post(
 console.log("========== AI RESPONSE ==========");
 console.log(aiResponse.data);
 
+
+const aiResult = aiResponse.data;
+
+console.log(aiResult);
+
 let recommendedPlants = aiResult.recommended_plants;
 
 if (
     aiResult.filters.category &&
     !aiResult.filters.care &&
-    !aiResult.filters.search &&
-    recommendedPlants.length <= 5
+    !aiResult.filters.size &&
+    !aiResult.filters.minPrice &&
+    !aiResult.filters.maxPrice &&
+    !aiResult.filters.search
 ) {
     recommendedPlants = [];
 }
