@@ -346,6 +346,13 @@ const products = await getFilteredProducts({
 console.log("========== PRODUCTS ==========");
 console.log(products.length);
 
+console.log("========== FINAL RESPONSE ==========");
+console.log(JSON.stringify({
+    success: true,
+    ai: aiResult,
+    products,
+}, null, 2));
+
 return res.json({
     success: true,
     ai: aiResult,
