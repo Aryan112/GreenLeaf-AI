@@ -33,6 +33,7 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
 )
 
     raw_response = generate_text(prompt)
+    print("✅ Recommendation finished")
 
     try:
         ai_json = json.loads(raw_response)

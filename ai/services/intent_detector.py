@@ -34,5 +34,6 @@ User Query:
 """
 
     response = generate_text(prompt)
+    print("✅ Intent detection finished")
 
     return json.loads(response)
