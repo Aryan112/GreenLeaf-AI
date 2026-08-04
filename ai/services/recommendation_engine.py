@@ -5,9 +5,12 @@ from services.retriever import Retriever
 from services.openai_service import generate_text
 from services.prompt_builder import build_recommendation_prompt
 from services.response_builder import build_response
-
+from tools.tool_router import ToolRouter
+from tools.search_tool import SearchTool
 
 retriever = Retriever()
+router = ToolRouter()
+search_tool = SearchTool()
 
 
 def get_ai_recommendation(user_query: str, plants: list) -> dict:
@@ -37,6 +40,7 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
 
     print("✅ Intent detection finished")
     print(intent_data)
+    tool = router.route(intent_data["intent"])
 
     # ---------------------------------
     # STEP 2 : Retrieve Relevant Plants
@@ -44,9 +48,23 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
 
     print("STEP 2")
 
-    retrieved_plants = retriever.retrieve(
-        user_query,
-        plants
+    if tool == "search":
+
+        filtered = search_tool.execute(
+            plants,
+            intent_data["filters"]
+    )
+
+        retrieved_plants = retriever.retrieve(
+            user_query,
+            filtered
+    )
+
+    else:
+
+        retrieved_plants = retriever.retrieve(
+            user_query,
+            plants
     )
 
     print(f"Retrieved {len(retrieved_plants)} plants")

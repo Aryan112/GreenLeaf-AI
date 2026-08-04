@@ -1,48 +1,55 @@
 from typing import List
 
+from services.ranking import RankingEngine
+
 
 class Retriever:
-    """
-    Hybrid RAG Retriever (Version 1)
 
-    Retrieves the most relevant plants before sending them
-    to Gemini.
-    """
+    def __init__(self):
+        self.ranker = RankingEngine()
 
     def retrieve(self, query: str, plants: List):
-        query = query.lower()
+        """
+        Hybrid RAG Retriever
+
+        Uses the Ranking Engine to score every plant
+        and returns the Top 10.
+        """
 
         scored = []
 
         for plant in plants:
 
-            score = 0
+            score = self.ranker.score(
+                query,
+                plant
+            )
 
-            name = plant.name.lower()
-            category = plant.category.lower()
-            care = plant.care.lower()
-            description = plant.description.lower()
+            scored.append(
+                (score, plant)
+            )
 
-            # Exact name match
-            if name in query:
-                score += 15
+        scored.sort(
+            key=lambda x: x[0],
+            reverse=True
+        )
 
-            # Category match
-            if category in query:
-                score += 10
+        print("\n========== RAG Retrieval ==========")
 
-            # Care match
-            if care in query:
-                score += 8
+        for score, plant in scored[:10]:
 
-            # Keyword match
-            for word in query.split():
-                if word in description:
-                    score += 2
+            if isinstance(plant, dict):
+                print(
+                    f"{plant['name']}  ---> Score: {score}"
+                )
+            else:
+                print(
+                    f"{plant.name}  ---> Score: {score}"
+                )
 
-            scored.append((score, plant))
+        print("===================================\n")
 
-        scored.sort(key=lambda x: x[0], reverse=True)
-
-        # Return Top 10
-        return [plant for score, plant in scored[:10]]
+        return [
+            plant
+            for score, plant in scored[:10]
+        ]
