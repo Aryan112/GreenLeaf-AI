@@ -2,6 +2,7 @@
 
 
 import json
+from services.intent_detector import detect_intent
 
 from services.openai_service import generate_text
 from services.prompt_builder import build_recommendation_prompt
@@ -23,9 +24,12 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
     Response Builder
     """
 
+    intent_data = detect_intent(user_query)
+
     prompt = build_recommendation_prompt(
     user_query,
-    plants
+    plants,
+    intent_data
 )
 
     raw_response = generate_text(prompt)

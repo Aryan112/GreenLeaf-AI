@@ -1,7 +1,7 @@
 import json
 
 
-def build_recommendation_prompt(user_query: str, plants: list) -> str:
+def build_recommendation_prompt(user_query: str, plants: list, intent_data: dict):
     schema = {
     "intent": "",
 
@@ -41,50 +41,29 @@ Description: {plant.description}
     return f"""
 You are GreenLeaf AI, an expert horticulturist and intelligent plant recommendation assistant.
 
-Your mission is to first understand the user's intent.
+=========================
+Detected Intent
+=========================
 
-There are four possible intents:
+Intent:
+{intent_data.get("intent", "")}
 
-1. browse_all
-The user wants to browse every available plant.
+Filters:
+{json.dumps(intent_data.get("filters", {}), indent=4)}
 
-Examples:
-- show all plants
-- show me all plants
-- display all plants
-- list every plant
-- what plants do you have
-- show your catalogue
+The intent has already been detected.
 
-2. browse_category
-The user wants every plant from a category.
+DO NOT classify the intent again.
 
-Examples:
-- indoor plants
-- outdoor plants
-- flowering plants
-- succulents
+Your job is ONLY to:
 
-3. browse_filtered
-The user wants every plant matching filters.
+1. Follow the detected intent exactly.
+2. Recommend plants only if the intent is "recommend_plants".
+3. Never change the detected intent or filters.
+4. Return valid JSON only.
 
-Examples:
-- indoor plants under ₹500
-- low maintenance indoor plants
-- medium flowering plants
-- office plants below ₹1000
 
-4. recommend_plants
-The user wants advice or recommendations.
 
-Examples:
-- recommend a plant for my bedroom
-- best plant for office
-- plant for beginners
-- pet friendly plant
-- plant that purifies air
-
-Always choose exactly ONE intent.
 
 -------------------------
 Think like a plant expert.
