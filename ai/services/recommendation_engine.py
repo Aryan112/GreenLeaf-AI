@@ -1,49 +1,102 @@
 import json
+
 from services.intent_detector import detect_intent
+from services.retriever import Retriever
 from services.openai_service import generate_text
 from services.prompt_builder import build_recommendation_prompt
 from services.response_builder import build_response
 
 
+retriever = Retriever()
+
+
 def get_ai_recommendation(user_query: str, plants: list) -> dict:
+    """
+    GreenLeaf AI Pipeline
+
+    User
+      ↓
+    Intent Detection
+      ↓
+    Hybrid RAG Retriever
+      ↓
+    Prompt Builder
+      ↓
+    Gemini
+      ↓
+    Response Builder
+    """
+
+    # ---------------------------------
+    # STEP 1 : Detect Intent
+    # ---------------------------------
 
     print("STEP 1")
 
     intent_data = detect_intent(user_query)
 
-    print("STEP 2")
+    print("✅ Intent detection finished")
     print(intent_data)
+
+    # ---------------------------------
+    # STEP 2 : Retrieve Relevant Plants
+    # ---------------------------------
+
+    print("STEP 2")
+
+    retrieved_plants = retriever.retrieve(
+        user_query,
+        plants
+    )
+
+    print(f"Retrieved {len(retrieved_plants)} plants")
+
+    # ---------------------------------
+    # STEP 3 : Build Prompt
+    # ---------------------------------
+
+    print("STEP 3")
 
     prompt = build_recommendation_prompt(
         user_query,
-        plants,
+        retrieved_plants,
         intent_data
     )
 
-    print("STEP 3")
-    print(len(prompt))
+    print("Prompt Length:", len(prompt))
+
+    # ---------------------------------
+    # STEP 4 : Gemini
+    # ---------------------------------
+
+    print("STEP 4")
 
     raw_response = generate_text(prompt)
 
-    print("STEP 4")
+    # ---------------------------------
+    # STEP 5 : Parse JSON
+    # ---------------------------------
+
+    print("STEP 5")
 
     try:
         ai_json = json.loads(raw_response)
 
     except Exception:
-        print(raw_response)
 
         ai_json = {
             "intent": "recommend_plants",
+            "recommended_plants": [],
             "filters": {},
             "reasoning": {
                 "title": "Unable to understand",
-                "message": "Please try again."
+                "message": "Please try describing your requirements differently."
             },
             "confidence": 0,
-            "follow_up": []
+            "follow_up": [
+                "Indoor or outdoor?",
+                "What's your budget?"
+            ]
         }
-
-    print("STEP 5")
 
     return build_response(ai_json)

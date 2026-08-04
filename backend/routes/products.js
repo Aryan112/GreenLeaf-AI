@@ -313,21 +313,33 @@ const plantResult = await pool.query(`
 `);
 console.log(plantResult.rows);
 
+console.log("==================================");
+console.log("🚀 Calling AI Service...");
+
+// TEMPORARY: Send only first 5 plants
+const payload = {
+    query,
+    plants: plantResult.rows.slice(0, 5).map(p => ({
+        name: p.name || "",
+        category: p.category || "",
+        care: p.care || "",
+        description: p.description || ""
+    }))
+};
+
+console.log("Plants Sent:", payload.plants.length);
+
+const start = Date.now();
+
 const aiResponse = await axios.post(
     `${process.env.AI_SERVICE_URL}/recommend`,
-    {
-        query,
-        plants: plantResult.rows.map(p => ({
-    name: p.name || "",
-    category: p.category || "",
-    care: p.care || "",
-    description: p.description || ""
-}))
-    },
+    payload,
     {
         timeout: 30000,
     }
 );
+
+console.log("⏱ AI Response Time:", Date.now() - start, "ms");
 console.log("========== AI RESPONSE ==========");
 console.log(aiResponse.data);
 
