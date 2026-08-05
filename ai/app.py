@@ -14,3 +14,4 @@ def home():
     return {
         "message": "GreenLeaf AI Service is Running 🚀"
     }
+
