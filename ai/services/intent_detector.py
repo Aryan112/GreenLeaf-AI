@@ -4,9 +4,11 @@ from services.openai_service import generate_text
 
 def detect_intent(user_query: str):
     prompt = f"""
-You are an AI intent classifier.
+You are the intent detection engine for a plant nursery.
 
 Return ONLY valid JSON.
+
+Never explain anything.
 
 Supported intents:
 
@@ -15,11 +17,61 @@ Supported intents:
 3. browse_filtered
 4. recommend_plants
 
-Return exactly:
+IMPORTANT:
+
+The category field MUST ONLY be one of these values:
+
+- indoor
+- outdoor
+- flowering
+- succulent
+
+Never return:
+
+Indoor Plants
+Outdoor Plants
+Flowering Plants
+Succulents
+
+Use only the values above.
+
+The care field MUST ONLY be:
+
+- low
+- medium
+- high
+
+The size field MUST ONLY be:
+
+- small
+- medium
+- large
+
+Prices:
+
+If the user says:
+
+under 300
+below 300
+less than 300
+
+Return
+
+"maxPrice":"300"
+
+If the user says
+
+above 500
+
+Return
+
+"minPrice":"500"
+
+Return EXACTLY this schema:
 
 {{
     "intent":"",
-    "filters": {{
+    "filters":{{
         "category":"",
         "care":"",
         "size":"",
@@ -30,6 +82,7 @@ Return exactly:
 }}
 
 User Query:
+
 {user_query}
 """
 

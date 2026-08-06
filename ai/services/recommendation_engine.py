@@ -40,7 +40,9 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
 
     print("✅ Intent detection finished")
     print(intent_data)
+
     tool = router.route(intent_data["intent"])
+    print("🛠 Selected Tool :", tool)
 
     # ---------------------------------
     # STEP 2 : Retrieve Relevant Plants
@@ -53,19 +55,19 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
         filtered = search_tool.execute(
             plants,
             intent_data["filters"]
-    )
+        )
 
         retrieved_plants = retriever.retrieve(
             user_query,
             filtered
-    )
+        )
 
     else:
 
         retrieved_plants = retriever.retrieve(
             user_query,
             plants
-    )
+        )
 
     print(f"Retrieved {len(retrieved_plants)} plants")
 
@@ -89,7 +91,29 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
 
     print("STEP 4")
 
-    raw_response = generate_text(prompt)
+    try:
+
+        raw_response = generate_text(prompt)
+
+    except Exception as e:
+
+        print("❌ Gemini Failed")
+        print(e)
+
+        return build_response({
+            "intent": intent_data["intent"],
+            "filters": intent_data["filters"],
+            "recommended_plants": [],
+            "reasoning": {
+                "title": "AI Recommendation",
+                "message": "Showing the best matching plants from our nursery."
+            },
+            "confidence": 80,
+            "follow_up": [
+                "Would you like indoor plants?",
+                "Would you like low-maintenance plants?"
+            ]
+        })
 
     # ---------------------------------
     # STEP 5 : Parse JSON
@@ -98,9 +122,12 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
     print("STEP 5")
 
     try:
+
         ai_json = json.loads(raw_response)
 
     except Exception:
+
+        print("❌ JSON Parsing Failed")
 
         ai_json = {
             "intent": "recommend_plants",
