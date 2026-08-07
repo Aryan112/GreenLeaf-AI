@@ -1,17 +1,19 @@
 from pydantic import BaseModel
+from typing import List
 
-from typing import Optional
 
 class Plant(BaseModel):
     name: str
     category: str
-    care: Optional[str] = ""
-    description: Optional[str] = ""
+    care: str
+    description: str
+    price: float
+    size: str
 
 
 class RecommendationRequest(BaseModel):
     query: str
-    plants: list[Plant]
+    plants: List[Plant]
 
 
 class Filters(BaseModel):
