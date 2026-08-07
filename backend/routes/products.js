@@ -307,8 +307,14 @@ router.post(
    // Call FastAPI
 console.log("AI_SERVICE_URL:", process.env.AI_SERVICE_URL);
 const plantResult = await pool.query(`
-  SELECT name, category, care, description
-  FROM products
+  SELECT
+    name,
+    category,
+    care,
+    description,
+    price,
+    size
+FROM products
   WHERE category IN ('indoor', 'outdoor', 'flowering', 'succulent')
 `);
 console.log(plantResult.rows);
@@ -320,11 +326,13 @@ console.log("🚀 Calling AI Service...");
 const payload = {
     query,
     plants: plantResult.rows.slice(0, 5).map(p => ({
-        name: p.name || "",
-        category: p.category || "",
-        care: p.care || "",
-        description: p.description || ""
-    }))
+    name: p.name || "",
+    category: p.category || "",
+    care: p.care || "",
+    description: p.description || "",
+    price: Number(p.price || 0),
+    size: p.size || ""
+}))
 };
 
 console.log("Plants Sent:", payload.plants.length);
@@ -335,7 +343,7 @@ const aiResponse = await axios.post(
     `${process.env.AI_SERVICE_URL}/recommend`,
     payload,
     {
-        timeout: 30000,
+        timeout: 60000,
     }
 );
 
