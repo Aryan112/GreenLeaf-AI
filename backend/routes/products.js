@@ -338,14 +338,44 @@ const payload = {
 console.log("Plants Sent:", payload.plants.length);
 
 const start = Date.now();
+try {
 
-const aiResponse = await axios.post(
-    `${process.env.AI_SERVICE_URL}/recommend`,
-    payload,
-    {
-        timeout: 60000,
+    console.log("Calling:", `${process.env.AI_SERVICE_URL}/recommend`);
+
+    const aiResponse = await axios.post(
+        `${process.env.AI_SERVICE_URL}/recommend`,
+        payload,
+        {
+            timeout: 60000,
+        }
+    );
+
+    console.log("SUCCESS");
+    console.log(aiResponse.data);
+
+    const aiResult = aiResponse.data;
+
+    // continue your code...
+
+} catch (err) {
+
+    console.log("========== AXIOS ERROR ==========");
+
+    console.log("Message:", err.message);
+    console.log("Code:", err.code);
+
+    if (err.response) {
+        console.log("Status:", err.response.status);
+        console.log("Headers:", err.response.headers);
+        console.log("Body:", err.response.data);
     }
-);
+
+    if (err.request) {
+        console.log("No response received from AI service.");
+    }
+
+    throw err;
+}
 
 console.log("⏱ AI Response Time:", Date.now() - start, "ms");
 console.log("========== AI RESPONSE ==========");
