@@ -325,7 +325,7 @@ console.log("🚀 Calling AI Service...");
 // TEMPORARY: Send only first 5 plants
 const payload = {
     query,
-    plants: plantResult.rows.slice(0, 5).map(p => ({
+    plants: plantResult.rows.map(p => ({
     name: p.name || "",
     category: p.category || "",
     care: p.care || "",
@@ -336,8 +336,8 @@ const payload = {
 };
 
 console.log("Plants Sent:", payload.plants.length);
-
 const start = Date.now();
+
 try {
 
     console.log("Calling:", `${process.env.AI_SERVICE_URL}/recommend`);
@@ -350,12 +350,59 @@ try {
         }
     );
 
-    console.log("SUCCESS");
-    console.log(aiResponse.data);
-
     const aiResult = aiResponse.data;
 
-    // continue your code...
+    console.log("SUCCESS");
+    console.log("⏱ AI Response Time:", Date.now() - start, "ms");
+    console.log("========== AI RESPONSE ==========");
+    console.log(aiResult);
+
+    let products;
+
+    switch (aiResult.intent) {
+
+        case "browse_all":
+            products = await getFilteredProducts({
+                page: 1,
+                limit: 1000,
+            });
+            break;
+
+        case "browse_category":
+        case "browse_filtered":
+            products = await getFilteredProducts({
+                ...aiResult.filters,
+                page: 1,
+                limit: 1000,
+            });
+            break;
+
+        case "recommend_plants":
+        default:
+            products = await getFilteredProducts({
+                ...aiResult.filters,
+                recommended_plants: aiResult.recommended_plants,
+                page: 1,
+                limit: 20,
+            });
+            break;
+    }
+
+    console.log("========== PRODUCTS ==========");
+    console.log(products.length);
+
+    console.log("========== FINAL RESPONSE ==========");
+    console.log(JSON.stringify({
+        success: true,
+        ai: aiResult,
+        products,
+    }, null, 2));
+
+    return res.json({
+        success: true,
+        ai: aiResult,
+        products,
+    });
 
 } catch (err) {
 
@@ -376,61 +423,6 @@ try {
 
     throw err;
 }
-
-console.log("⏱ AI Response Time:", Date.now() - start, "ms");
-console.log("========== AI RESPONSE ==========");
-console.log(aiResponse.data);
-
-
-const aiResult = aiResponse.data;
-
-console.log(aiResult);
-
-let products;
-
-switch (aiResult.intent) {
-
-case "browse_all":
-    products = await getFilteredProducts({
-        page: 1,
-        limit: 1000,
-    });
-    break;
-
-case "browse_category":
-case "browse_filtered":
-    products = await getFilteredProducts({
-        ...aiResult.filters,
-        page: 1,
-        limit: 1000,
-    });
-    break;
-
-case "recommend_plants":
-default:
-    products = await getFilteredProducts({
-        ...aiResult.filters,
-        recommended_plants: aiResult.recommended_plants,
-        page: 1,
-        limit: 20,
-    });
-}
-
-console.log("========== PRODUCTS ==========");
-console.log(products.length);
-
-console.log("========== FINAL RESPONSE ==========");
-console.log(JSON.stringify({
-    success: true,
-    ai: aiResult,
-    products,
-}, null, 2));
-
-return res.json({
-    success: true,
-    ai: aiResult,
-    products,
-});
   })
 );
 module.exports = router;
