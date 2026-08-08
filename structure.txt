@@ -1,0 +1,187 @@
+.
+├── ai
+│   ├── app.py
+│   ├── models
+│   │   └── schemas.py
+│   ├── prompts
+│   │   └── prompts.py
+│   ├── requirements.txt
+│   ├── routers
+│   │   └── recommendation.py
+│   ├── services
+│   │   ├── explainer.py
+│   │   ├── fallback_service.py
+│   │   ├── intent_detector.py
+│   │   ├── json_parser.py
+│   │   ├── knowledge_base.py
+│   │   ├── match_score.py
+│   │   ├── memory_service.py
+│   │   ├── openai_service.py
+│   │   ├── prompt_builder.py
+│   │   ├── ranking.py
+│   │   ├── recommendation_engine.py
+│   │   ├── response_builder.py
+│   │   └── retriever.py
+│   ├── test.py
+│   ├── test_models.py
+│   └── tools
+│       ├── compare_tool.py
+│       ├── search_tool.py
+│       └── tool_router.py
+├── backend
+│   ├── check-order-time.js
+│   ├── check-tables.js
+│   ├── config
+│   │   └── redisClient.js
+│   ├── data
+│   ├── database
+│   │   └── complete-database-setup.sql
+│   ├── db
+│   │   ├── index.js
+│   │   └── pool.js
+│   ├── error.log
+│   ├── jest.config.js
+│   ├── middleware
+│   │   ├── auth.js
+│   │   ├── cache.js
+│   │   ├── errorHandler.js
+│   │   ├── jwt.js
+│   │   ├── logger.js
+│   │   └── loginRateLimiter.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   │   └── images
+│   │       └── products
+│   │           └── plants
+│   │               ├── aglaonema-red-valentine.jpg
+│   │               ├── aglaonema-silver-bay.jpg
+│   │               ├── areca-palm.jpg
+│   │               ├── bamboo-palm.jpg
+│   │               ├── birds-nest-fern.jpg
+│   │               ├── calathea-medallion.jpg
+│   │               ├── calathea-orbifolia.jpg
+│   │               ├── dracaena-marginata.jpg
+│   │               ├── fiddle-leaf-fig.jpg
+│   │               ├── golden-pothos.jpg
+│   │               ├── heartleaf-philodendron.jpg
+│   │               ├── hinese-evergreen.jpg
+│   │               ├── kentia-palm.jpg
+│   │               ├── lucky-bamboo.jpg
+│   │               ├── marble-queen-pothos.jpg
+│   │               ├── money-tree.jpg
+│   │               ├── monstera-adansonii.jpg
+│   │               ├── monstera-deliciosa.jpg
+│   │               ├── neon-pothos.jpg
+│   │               ├── parlor-palm.jpg
+│   │               ├── philodendron-birkin.jpg
+│   │               ├── philodendron-brasil.jpg
+│   │               ├── prayer-plant.jpg
+│   │               ├── rubber-plant.jpg
+│   │               └── swiss-cheese-vine.jpg
+│   ├── routes
+│   │   ├── admin.js
+│   │   ├── api.js
+│   │   ├── auth.js
+│   │   ├── cart.js
+│   │   ├── contacts.js
+│   │   ├── newsletter.js
+│   │   ├── orders.js
+│   │   ├── payment.js
+│   │   └── products.js
+│   ├── run-tests.bat
+│   ├── schemas
+│   │   └── User.js
+│   ├── server.js
+│   ├── services
+│   │   └── productService.js
+│   ├── setup-database.js
+│   ├── tests
+│   │   ├── api.test.js
+│   │   ├── setup.js
+│   │   └── unit.test.js
+│   └── views
+│       ├── auth-login.ejs
+│       ├── auth-register.ejs
+│       ├── aux-grid.ejs
+│       ├── care.ejs
+│       ├── categories.ejs
+│       ├── checkout.ejs
+│       ├── contact.ejs
+│       ├── gifting-new.ejs
+│       ├── gifting.ejs
+│       ├── home.ejs
+│       ├── layout.ejs
+│       ├── orders.ejs
+│       └── services.ejs
+├── frontend
+│   ├── 404.html
+│   ├── cache-dashboard.html
+│   ├── css
+│   │   ├── responsive.css
+│   │   └── style.css
+│   ├── favicon.ico
+│   ├── images
+│   │   ├── DemoPotPlant.jpg
+│   │   ├── favicon.ico
+│   │   ├── hero-bg.jpg
+│   │   └── products
+│   │       ├── plants
+│   │       │   ├── aloe-vera.jpg
+│   │       │   ├── anthurium.jpg
+│   │       │   ├── bamboo-palm.jpg
+│   │       │   ├── bird-of-paradise.jpg
+│   │       │   ├── birds-nest-fern.jpg
+│   │       │   ├── boston-fern.jpg
+│   │       │   ├── cactus-variety.jpg
+│   │       │   ├── calathea.jpg
+│   │       │   ├── english-lavender.jpg
+│   │       │   ├── fiddle-leaf-fig.jpg
+│   │       │   ├── jade-plant.jpg
+│   │       │   ├── monstera.jpg
+│   │       │   ├── orchid-phalaenopsis.jpg
+│   │       │   ├── orchid-premium.jpg
+│   │       │   ├── orchid.jpg
+│   │       │   ├── peace-lily.jpg
+│   │       │   ├── pothos-golden.jpg
+│   │       │   ├── rose-bush.jpg
+│   │       │   ├── rosemary.jpg
+│   │       │   ├── rubber-plant.jpg
+│   │       │   ├── snake-plant.jpg
+│   │       │   ├── spider-plant.jpg
+│   │       │   ├── string-of-pearls.jpg
+│   │       │   ├── succulent-mix.jpg
+│   │       │   ├── zz-plant-premium.jpg
+│   │       │   ├── zz-plant-zamioculcas.jpg
+│   │       │   └── zz-plant.jpg
+│   │       ├── pots
+│   │       │   ├── bamboo-fiber-planter.jpg
+│   │       │   ├── ceramic-planter.jpg
+│   │       │   ├── decorative-planter-stand.jpg
+│   │       │   ├── glazed-indoor-pot.jpg
+│   │       │   ├── modern-hanging-planter.jpg
+│   │       │   ├── self-watering.jpg
+│   │       │   ├── terracotta-pot-collection.jpg
+│   │       │   └── wooden-planter-box.jpg
+│   │       └── tools
+│   │           ├── hand-trowel-fork-set.jpg
+│   │           ├── ph-tester.jpg
+│   │           ├── plant-fertilizer-organic.jpg
+│   │           ├── plant-mister-spray-bottle.jpg
+│   │           ├── plant-support-stakes.jpg
+│   │           ├── pruning-shears-set.jpg
+│   │           ├── tool-kit.jpg
+│   │           └── watering-can.jpg
+│   └── js
+│       ├── browser-cache.js
+│       ├── cache-indicator.js
+│       ├── cart.js
+│       ├── filters.js
+│       ├── jwt-integration.js
+│       ├── main.js
+│       ├── newsletter.js
+│       ├── products.js
+│       └── websocket-integration.js
+└── structure.txt
+
+30 directories, 155 files

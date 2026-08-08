@@ -1,5 +1,25 @@
 import json
 from services.openai_service import generate_text
+from services.knowledge_base import KNOWLEDGE
+
+VALID_CATEGORIES = {"indoor", "outdoor", "flowering", "succulent"}
+VALID_CARE = {"low", "medium", "high"}
+
+
+def resolve_category_from_knowledge_base(user_query: str) -> str:
+    """
+    Falls back to keyword-based matching when the LLM
+    doesn't return one of the 4 valid category values.
+    e.g. "living room" -> "indoor", "balcony" -> "outdoor"
+    """
+    query_lower = user_query.lower()
+
+    for rule in KNOWLEDGE.values():
+        matched = any(keyword in query_lower for keyword in rule.get("keywords", []))
+        if matched and rule.get("category") in VALID_CATEGORIES:
+            return rule["category"]
+
+    return ""
 
 
 def detect_intent(user_query: str):
@@ -26,6 +46,12 @@ The category field MUST ONLY be one of these values:
 - flowering
 - succulent
 
+Map real-world phrases to these categories. Examples:
+- "living room", "bedroom", "office", "hostel", "apartment", "home decor" -> indoor
+- "balcony", "terrace", "garden", "backyard", "patio" -> outdoor
+- "bouquet", "birthday", "anniversary", "colorful blooms" -> flowering
+- "cactus", "desert plant", "low water" -> succulent
+
 Never return:
 
 Indoor Plants
@@ -33,7 +59,7 @@ Outdoor Plants
 Flowering Plants
 Succulents
 
-Use only the values above.
+Use only the values above. If nothing matches, return an empty string.
 
 The care field MUST ONLY be:
 
@@ -89,4 +115,32 @@ User Query:
     response = generate_text(prompt)
     print("✅ Intent detection finished")
 
-    return json.loads(response)
+    intent_data = json.loads(response)
+
+    # -------------------------------------------------
+    # Fallback: fix category if Gemini returned something
+    # outside the 4 valid values (e.g. "living room")
+    # -------------------------------------------------
+    filters = intent_data.get("filters", {})
+    category = (filters.get("category") or "").lower().strip()
+
+    if category not in VALID_CATEGORIES:
+        resolved = resolve_category_from_knowledge_base(user_query)
+        filters["category"] = resolved
+        print(f"🔧 Category fallback: '{category}' -> '{resolved}'")
+
+    # -------------------------------------------------
+    # Fallback: fix care if Gemini returned "easy/moderate/expert"
+    # instead of "low/medium/high" (knowledge_base.py inconsistency)
+    # -------------------------------------------------
+    care = (filters.get("care") or "").lower().strip()
+    care_map = {"easy": "low", "moderate": "medium", "expert": "high"}
+
+    if care in care_map:
+        filters["care"] = care_map[care]
+    elif care not in VALID_CARE and care != "":
+        filters["care"] = ""
+
+    intent_data["filters"] = filters
+
+    return intent_data
