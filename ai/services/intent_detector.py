@@ -3,7 +3,7 @@ from services.openai_service import generate_text
 from services.knowledge_base import KNOWLEDGE
 
 VALID_CATEGORIES = {"indoor", "outdoor", "flowering", "succulent"}
-VALID_CARE = {"low", "medium", "high"}
+VALID_CARE = {"easy", "moderate", "expert"}
 
 
 def resolve_category_from_knowledge_base(user_query: str) -> str:
@@ -63,15 +63,31 @@ Use only the values above. If nothing matches, return an empty string.
 
 The care field MUST ONLY be:
 
-- low
-- medium
-- high
+- easy
+- moderate
+- expert
+
+Map real-world phrases to these values. Examples:
+- "low maintenance", "beginner friendly", "easy to care for", "busy", "travel a lot" -> easy
+- "medium care", "some attention needed" -> moderate
+- "advanced", "professional", "expert level" -> expert
 
 The size field MUST ONLY be:
 
 - small
 - medium
 - large
+
+The "search" field is ONLY for when the user names a SPECIFIC plant or exact
+product keyword, e.g. "search for money plant", "show me aloe vera",
+"do you have jade plant".
+
+NEVER put generic context/location/occasion words into "search" — words like
+"desk", "office", "gift", "room", "birthday", "balcony", "living room" are
+already captured by category/care/size and must NOT also be placed in "search".
+
+If the user query does not explicitly name a plant, leave "search" as an
+empty string "".
 
 Prices:
 
@@ -130,11 +146,12 @@ User Query:
         print(f"🔧 Category fallback: '{category}' -> '{resolved}'")
 
     # -------------------------------------------------
-    # Fallback: fix care if Gemini returned "easy/moderate/expert"
-    # instead of "low/medium/high" (knowledge_base.py inconsistency)
+    # Fallback: normalize care to easy/moderate/expert
+    # (Gemini or knowledge_base.py may occasionally emit
+    # low/medium/high style synonyms)
     # -------------------------------------------------
     care = (filters.get("care") or "").lower().strip()
-    care_map = {"easy": "low", "moderate": "medium", "expert": "high"}
+    care_map = {"low": "easy", "medium": "moderate", "high": "expert"}
 
     if care in care_map:
         filters["care"] = care_map[care]
