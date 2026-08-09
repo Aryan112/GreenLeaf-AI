@@ -119,6 +119,14 @@ Extract the two plant names into "comparePlants": ["name1", "name2"].
 If the user does not clearly name two plants, use intent "recommend_plants"
 instead.
 
+If the user asks for a specific NUMBER of plants (e.g. "top 5 plants",
+"best 3 indoor plants", "show me 5 plants for my office"), the intent
+MUST be "recommend_plants" — NOT browse_category or browse_filtered —
+so the AI can hand-pick and limit the exact number of plants requested.
+
+Extract the requested number into "count" (as an integer). If no specific
+number is mentioned, use 0.
+
 Return EXACTLY this schema:
 
 {{
@@ -131,7 +139,8 @@ Return EXACTLY this schema:
         "maxPrice":"",
         "search":""
     }},
-    "comparePlants":["",""]
+    "comparePlants":["",""],
+    "count":0
 }}
 
 User Query:
