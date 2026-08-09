@@ -346,7 +346,7 @@ try {
         `${process.env.AI_SERVICE_URL}/recommend`,
         payload,
         {
-            timeout: 60000,
+            timeout: 90000,
         }
     );
 
