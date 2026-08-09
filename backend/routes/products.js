@@ -377,6 +377,14 @@ try {
             });
             break;
 
+        case "compare_plants":
+            // No product query needed — the AI service already built
+            // the comparison data in aiResult.comparison. The frontend
+            // should check aiResult.intent === "compare_plants" and
+            // render aiResult.comparison instead of a product grid.
+            products = [];
+            break;
+
         case "recommend_plants":
         default:
             products = await getFilteredProducts({
