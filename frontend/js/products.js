@@ -442,6 +442,87 @@ if (aiButton) {
 
             if (data.success) {
 
+                // ==========================
+                // COMPARE PLANTS RESPONSE
+                // ==========================
+                if (data.ai && data.ai.intent === "compare_plants") {
+
+                    const comparison = data.ai.comparison;
+
+                    if (!comparison) {
+
+                        aiChat.lastElementChild.querySelector(".ai-bubble").innerHTML = `
+    <h3>🤔 ${data.ai.reasoning?.title || "Plants Not Found"}</h3>
+
+    <p>${data.ai.reasoning?.message || "I couldn't find one or both of those plants in our nursery."}</p>
+`;
+
+                    } else {
+
+                        const p1 = comparison.plant1;
+                        const p2 = comparison.plant2;
+
+                        aiChat.lastElementChild.querySelector(".ai-bubble").innerHTML = `
+    <div style="line-height:1.8">
+
+        <h3 style="margin-bottom:10px;">
+            🌿 ${data.ai.reasoning?.title || "Plant Comparison"}
+        </h3>
+
+        <p>${data.ai.reasoning?.message || ""}</p>
+
+        <br>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+
+            <div style="
+                flex:1;
+                min-width:200px;
+                background:#eef8ee;
+                border-left:5px solid #2e7d32;
+                padding:12px;
+                border-radius:10px;
+            ">
+                <strong>${p1.name}</strong>
+                <br><br>
+                <div><b>Category:</b> ${p1.category || "-"}</div>
+                <div><b>Care:</b> ${p1.care || "-"}</div>
+                <div style="margin-top:8px;">${p1.description || ""}</div>
+            </div>
+
+            <div style="
+                flex:1;
+                min-width:200px;
+                background:#eef8ee;
+                border-left:5px solid #2e7d32;
+                padding:12px;
+                border-radius:10px;
+            ">
+                <strong>${p2.name}</strong>
+                <br><br>
+                <div><b>Category:</b> ${p2.category || "-"}</div>
+                <div><b>Care:</b> ${p2.care || "-"}</div>
+                <div style="margin-top:8px;">${p2.description || ""}</div>
+            </div>
+
+        </div>
+
+    </div>
+`;
+                    }
+
+                    // No product grid update for compare — clear it out
+                    const productsGrid = document.getElementById('products-grid');
+                    if (productsGrid) productsGrid.innerHTML = '';
+                    updateResultsCount(0, 0, 0);
+
+                    return;
+                }
+
+                // ==========================
+                // NORMAL BROWSE / RECOMMEND RESPONSE
+                // ==========================
+
                 // Update last AI message
                 aiChat.lastElementChild.querySelector(".ai-bubble").innerHTML = `
     <div style="line-height:1.8">
