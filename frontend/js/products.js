@@ -439,6 +439,7 @@ if (aiButton) {
             });
 
             const data = await response.json();
+            console.log("🔍 FULL AI RESPONSE:", JSON.stringify(data.ai, null, 2));   // ADD THIS LINE HERE
 
             if (data.success) {
 
