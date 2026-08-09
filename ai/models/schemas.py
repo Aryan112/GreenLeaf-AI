@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 
 class Plant(BaseModel):
@@ -30,6 +30,18 @@ class Reasoning(BaseModel):
     message: str = ""
 
 
+class ComparePlant(BaseModel):
+    name: str = ""
+    category: str = ""
+    care: str = ""
+    description: str = ""
+
+
+class Comparison(BaseModel):
+    plant1: ComparePlant
+    plant2: ComparePlant
+
+
 class RecommendationResponse(BaseModel):
     intent: str
     filters: Filters
@@ -37,3 +49,4 @@ class RecommendationResponse(BaseModel):
     confidence: int
     follow_up: list[str]
     recommended_plants: list[str]
+    comparison: Optional[Comparison] = None
