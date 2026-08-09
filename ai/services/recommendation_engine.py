@@ -7,10 +7,12 @@ from services.prompt_builder import build_recommendation_prompt
 from services.response_builder import build_response
 from tools.tool_router import ToolRouter
 from tools.search_tool import SearchTool
+from tools.compare_tool import CompareTool
 
 retriever = Retriever()
 router = ToolRouter()
 search_tool = SearchTool()
+compare_tool = CompareTool()
 
 
 def get_ai_recommendation(user_query: str, plants: list) -> dict:
@@ -21,11 +23,11 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
       ↓
     Intent Detection
       ↓
-    Hybrid RAG Retriever
+    Hybrid RAG Retriever / Compare Tool
       ↓
-    Prompt Builder
+    Prompt Builder (skipped for compare)
       ↓
-    Gemini
+    Gemini (skipped for compare)
       ↓
     Response Builder
     """
@@ -43,6 +45,66 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
 
     tool = router.route(intent_data["intent"])
     print("🛠 Selected Tool :", tool)
+
+    # ---------------------------------
+    # SHORT-CIRCUIT : Compare Plants
+    # ---------------------------------
+    # Compare doesn't need retrieval or Gemini ranking —
+    # it's a direct lookup + attribute diff.
+
+    if tool == "compare":
+
+        compare_names = intent_data.get("comparePlants", ["", ""])
+
+        if len(compare_names) < 2 or not compare_names[0] or not compare_names[1]:
+
+            return build_response({
+                "intent": "compare_plants",
+                "filters": intent_data.get("filters", {}),
+                "comparison": None,
+                "reasoning": {
+                    "title": "Need Two Plants",
+                    "message": "Please tell me the two plants you'd like to compare."
+                },
+                "confidence": 40,
+                "follow_up": [
+                    "Which two plants would you like to compare?"
+                ]
+            })
+
+        comparison = compare_tool.execute(
+            plants,
+            compare_names[0],
+            compare_names[1]
+        )
+
+        if not comparison:
+
+            return build_response({
+                "intent": "compare_plants",
+                "filters": intent_data.get("filters", {}),
+                "comparison": None,
+                "reasoning": {
+                    "title": "Plants Not Found",
+                    "message": f"I couldn't find one or both of '{compare_names[0]}' and '{compare_names[1]}' in our nursery."
+                },
+                "confidence": 40,
+                "follow_up": [
+                    "Would you like to browse our plant categories instead?"
+                ]
+            })
+
+        return build_response({
+            "intent": "compare_plants",
+            "filters": intent_data.get("filters", {}),
+            "comparison": comparison,
+            "reasoning": {
+                "title": "Plant Comparison",
+                "message": f"Here's how {comparison['plant1']['name']} compares to {comparison['plant2']['name']}."
+            },
+            "confidence": 90,
+            "follow_up": []
+        })
 
     # ---------------------------------
     # STEP 2 : Retrieve Relevant Plants

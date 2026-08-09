@@ -36,6 +36,7 @@ Supported intents:
 2. browse_category
 3. browse_filtered
 4. recommend_plants
+5. compare_plants
 
 IMPORTANT:
 
@@ -109,6 +110,15 @@ Return
 
 "minPrice":"500"
 
+If the intent is compare_plants, the user is asking to compare exactly
+two named plants (e.g. "compare aloe vera and snake plant",
+"difference between money plant and jade plant").
+
+Extract the two plant names into "comparePlants": ["name1", "name2"].
+
+If the user does not clearly name two plants, use intent "recommend_plants"
+instead.
+
 Return EXACTLY this schema:
 
 {{
@@ -120,7 +130,8 @@ Return EXACTLY this schema:
         "minPrice":"",
         "maxPrice":"",
         "search":""
-    }}
+    }},
+    "comparePlants":["",""]
 }}
 
 User Query:

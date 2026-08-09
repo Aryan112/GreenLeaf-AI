@@ -9,6 +9,11 @@ def build_response(ai_result: dict) -> dict:
 
         "filters": ai_result.get("filters", {}),
 
+        "comparison": ai_result.get(
+            "comparison",
+            None
+        ),
+
         "reasoning": ai_result.get(
             "reasoning",
             {
