@@ -9,9 +9,8 @@ app = FastAPI(
 app.include_router(router)
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def home():
     return {
         "message": "GreenLeaf AI Service is Running 🚀"
     }
-
