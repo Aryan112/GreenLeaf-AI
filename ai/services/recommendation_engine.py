@@ -15,6 +15,25 @@ search_tool = SearchTool()
 compare_tool = CompareTool()
 
 
+def normalize_confidence(value):
+    """
+    Gemini sometimes returns confidence as a 0-1 float (e.g. 0.95)
+    instead of a 0-100 integer. FastAPI's strict `confidence: int`
+    schema crashes the whole response on a fractional value, so we
+    coerce it here before it ever reaches build_response().
+    """
+
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        return 80
+
+    if 0 <= value <= 1:
+        value = value * 100
+
+    return int(round(value))
+
+
 def get_ai_recommendation(user_query: str, plants: list) -> dict:
     """
     GreenLeaf AI Pipeline
@@ -205,5 +224,9 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
                 "What's your budget?"
             ]
         }
+
+    # Normalize confidence — Gemini sometimes returns 0-1 float instead
+    # of 0-100 int, which crashes FastAPI's strict response validation.
+    ai_json["confidence"] = normalize_confidence(ai_json.get("confidence", 80))
 
     return build_response(ai_json)
