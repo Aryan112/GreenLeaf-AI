@@ -38,6 +38,27 @@ Supported intents:
 4. recommend_plants
 5. compare_plants
 
+IMPORTANT — choosing between browse_category/browse_filtered vs recommend_plants:
+
+Use "recommend_plants" (curated, AI hand-picks a small set) whenever the
+user's language implies curation or a recommendation, NOT just plain
+browsing. This includes:
+
+- Any explicit number ("top 5", "best 3", "show me 5 plants")
+- Qualitative words like "best", "top", "recommend", "suggest",
+  "which plants should I get", "what's good for..."
+- Personal/contextual requests ("for my office", "for gifting",
+  "for a beginner") where the user wants a tailored pick, not a
+  full category listing
+
+Use "browse_category" or "browse_filtered" ONLY when the user is plainly
+asking to see/browse a category or filtered set, with no implication of
+curation — e.g. "show me indoor plants", "show me succulents under 500",
+"list all flowering plants".
+
+When in doubt between the two, prefer "recommend_plants" — showing a
+curated top pick is more helpful than dumping the entire category.
+
 IMPORTANT:
 
 The category field MUST ONLY be one of these values:
@@ -50,7 +71,7 @@ The category field MUST ONLY be one of these values:
 Map real-world phrases to these categories. Examples:
 - "living room", "bedroom", "office", "hostel", "apartment", "home decor" -> indoor
 - "balcony", "terrace", "garden", "backyard", "patio" -> outdoor
-- "bouquet", "birthday", "anniversary", "colorful blooms" -> flowering
+- "bouquet", "birthday", "anniversary", "colorful blooms", "gifting", "gift" -> flowering
 - "cactus", "desert plant", "low water" -> succulent
 
 Never return:
@@ -79,16 +100,20 @@ The size field MUST ONLY be:
 - medium
 - large
 
-The "search" field is ONLY for when the user names a SPECIFIC plant or exact
-product keyword, e.g. "search for money plant", "show me aloe vera",
-"do you have jade plant".
+If the intent is compare_plants, the user is asking to compare exactly
+two named plants (e.g. "compare aloe vera and snake plant",
+"difference between money plant and jade plant").
 
-NEVER put generic context/location/occasion words into "search" — words like
-"desk", "office", "gift", "room", "birthday", "balcony", "living room" are
-already captured by category/care/size and must NOT also be placed in "search".
+Extract the two plant names into "comparePlants": ["name1", "name2"].
 
-If the user query does not explicitly name a plant, leave "search" as an
-empty string "".
+If the user does not clearly name two plants, use intent "recommend_plants"
+instead.
+
+If the user asks for a specific NUMBER of plants (e.g. "top 5 plants",
+"best 3 indoor plants", "show me 5 plants for my office"), extract that
+number into "count" (as an integer). If no specific number is mentioned,
+use 0 — this does NOT change which intent to pick; it's just how many
+to recommend when intent is recommend_plants.
 
 Prices:
 
@@ -109,23 +134,6 @@ above 500
 Return
 
 "minPrice":"500"
-
-If the intent is compare_plants, the user is asking to compare exactly
-two named plants (e.g. "compare aloe vera and snake plant",
-"difference between money plant and jade plant").
-
-Extract the two plant names into "comparePlants": ["name1", "name2"].
-
-If the user does not clearly name two plants, use intent "recommend_plants"
-instead.
-
-If the user asks for a specific NUMBER of plants (e.g. "top 5 plants",
-"best 3 indoor plants", "show me 5 plants for my office"), the intent
-MUST be "recommend_plants" — NOT browse_category or browse_filtered —
-so the AI can hand-pick and limit the exact number of plants requested.
-
-Extract the requested number into "count" (as an integer). If no specific
-number is mentioned, use 0.
 
 Return EXACTLY this schema:
 
@@ -166,9 +174,8 @@ User Query:
         print(f"🔧 Category fallback: '{category}' -> '{resolved}'")
 
     # -------------------------------------------------
-    # Fallback: normalize care to easy/moderate/expert
-    # (Gemini or knowledge_base.py may occasionally emit
-    # low/medium/high style synonyms)
+    # Fallback: fix care if Gemini returned "low/medium/high"
+    # instead of "easy/moderate/expert"
     # -------------------------------------------------
     care = (filters.get("care") or "").lower().strip()
     care_map = {"low": "easy", "medium": "moderate", "high": "expert"}
