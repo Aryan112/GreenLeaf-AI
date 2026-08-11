@@ -100,9 +100,19 @@ async function getFilteredProducts(filters) {
       query += " ORDER BY id ASC";
   }
 
-  // Optional Pagination
-  // const offset = (page - 1) * limit;
-  // query += ` LIMIT ${limit} OFFSET ${offset}`;
+  // ==========================
+  // Pagination — SAFETY NET
+  // ==========================
+  // Always enforce a limit, even if filters end up empty (e.g. a
+  // fallback response with no detected category/price). Without
+  // this, an empty-filters bug can silently return the ENTIRE
+  // catalog instead of a bounded page of results.
+  const safeLimit = Math.min(parseInt(limit) || 12, 1000);
+  const safePage = Math.max(parseInt(page) || 1, 1);
+  const offset = (safePage - 1) * safeLimit;
+
+  query += ` LIMIT $${i++} OFFSET $${i++}`;
+  values.push(safeLimit, offset);
 
   const result = await pool.query(query, values);
 
