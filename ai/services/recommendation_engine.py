@@ -181,6 +181,9 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
         print("❌ Gemini Failed")
         print(e)
 
+        # Preserve the correctly-detected intent/filters instead of
+        # discarding them — Gemini failing to rank/explain shouldn't
+        # throw away a perfectly good category/price filter match.
         return build_response({
             "intent": intent_data["intent"],
             "filters": intent_data["filters"],
@@ -209,19 +212,24 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
     except Exception:
 
         print("❌ JSON Parsing Failed")
+        print("Raw response was:", raw_response)
 
+        # CRITICAL: preserve the intent/filters we already correctly
+        # detected in Step 1, instead of resetting to empty filters.
+        # An empty-filters fallback here previously caused the backend
+        # to match (and return) the ENTIRE product catalog, since
+        # empty category/price filters skip all WHERE clauses.
         ai_json = {
-            "intent": "recommend_plants",
+            "intent": intent_data["intent"],
             "recommended_plants": [],
-            "filters": {},
+            "filters": intent_data["filters"],
             "reasoning": {
-                "title": "Unable to understand",
-                "message": "Please try describing your requirements differently."
+                "title": "Showing Matching Plants",
+                "message": "Here are plants that match your filters."
             },
-            "confidence": 0,
+            "confidence": 70,
             "follow_up": [
-                "Indoor or outdoor?",
-                "What's your budget?"
+                "Would you like to narrow it down further?"
             ]
         }
 

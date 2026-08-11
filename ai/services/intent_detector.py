@@ -1,240 +1,190 @@
 import json
-
-from services.intent_detector import detect_intent
-from services.retriever import Retriever
 from services.openai_service import generate_text
-from services.prompt_builder import build_recommendation_prompt
-from services.response_builder import build_response
-from tools.tool_router import ToolRouter
-from tools.search_tool import SearchTool
-from tools.compare_tool import CompareTool
+from services.knowledge_base import KNOWLEDGE
 
-retriever = Retriever()
-router = ToolRouter()
-search_tool = SearchTool()
-compare_tool = CompareTool()
+VALID_CATEGORIES = {"indoor", "outdoor", "flowering", "succulent"}
+VALID_CARE = {"easy", "moderate", "expert"}
 
 
-def normalize_confidence(value):
+def resolve_category_from_knowledge_base(user_query: str) -> str:
     """
-    Gemini sometimes returns confidence as a 0-1 float (e.g. 0.95)
-    instead of a 0-100 integer. FastAPI's strict `confidence: int`
-    schema crashes the whole response on a fractional value, so we
-    coerce it here before it ever reaches build_response().
+    Falls back to keyword-based matching when the LLM
+    doesn't return one of the 4 valid category values.
+    e.g. "living room" -> "indoor", "balcony" -> "outdoor"
     """
+    query_lower = user_query.lower()
 
-    try:
-        value = float(value)
-    except (TypeError, ValueError):
-        return 80
+    for rule in KNOWLEDGE.values():
+        matched = any(keyword in query_lower for keyword in rule.get("keywords", []))
+        if matched and rule.get("category") in VALID_CATEGORIES:
+            return rule["category"]
 
-    if 0 <= value <= 1:
-        value = value * 100
-
-    return int(round(value))
+    return ""
 
 
-def get_ai_recommendation(user_query: str, plants: list) -> dict:
-    """
-    GreenLeaf AI Pipeline
+def detect_intent(user_query: str):
+    prompt = f"""
+You are the intent detection engine for a plant nursery.
 
-    User
-      ↓
-    Intent Detection
-      ↓
-    Hybrid RAG Retriever / Compare Tool
-      ↓
-    Prompt Builder (skipped for compare)
-      ↓
-    Gemini (skipped for compare)
-      ↓
-    Response Builder
-    """
+Return ONLY valid JSON.
 
-    # ---------------------------------
-    # STEP 1 : Detect Intent
-    # ---------------------------------
+Never explain anything.
 
-    print("STEP 1")
+Supported intents:
 
-    intent_data = detect_intent(user_query)
+1. browse_all
+2. browse_category
+3. browse_filtered
+4. recommend_plants
+5. compare_plants
 
+IMPORTANT — choosing between browse_category/browse_filtered vs recommend_plants:
+
+Use "recommend_plants" (curated, AI hand-picks a small set) whenever the
+user's language implies curation or a recommendation, NOT just plain
+browsing. This includes:
+
+- Any explicit number ("top 5", "best 3", "show me 5 plants")
+- Qualitative words like "best", "top", "recommend", "suggest",
+  "which plants should I get", "what's good for..."
+- Personal/contextual requests ("for my office", "for gifting",
+  "for a beginner") where the user wants a tailored pick, not a
+  full category listing
+
+Use "browse_category" or "browse_filtered" ONLY when the user is plainly
+asking to see/browse a category or filtered set, with no implication of
+curation — e.g. "show me indoor plants", "show me succulents under 500",
+"list all flowering plants".
+
+When in doubt between the two, prefer "recommend_plants" — showing a
+curated top pick is more helpful than dumping the entire category.
+
+IMPORTANT:
+
+The category field MUST ONLY be one of these values:
+
+- indoor
+- outdoor
+- flowering
+- succulent
+
+Map real-world phrases to these categories. Examples:
+- "living room", "bedroom", "office", "hostel", "apartment", "home decor" -> indoor
+- "balcony", "terrace", "garden", "backyard", "patio" -> outdoor
+- "bouquet", "birthday", "anniversary", "colorful blooms", "gifting", "gift" -> flowering
+- "cactus", "desert plant", "low water" -> succulent
+
+Never return:
+
+Indoor Plants
+Outdoor Plants
+Flowering Plants
+Succulents
+
+Use only the values above. If nothing matches, return an empty string.
+
+The care field MUST ONLY be:
+
+- easy
+- moderate
+- expert
+
+Map real-world phrases to these values. Examples:
+- "low maintenance", "beginner friendly", "easy to care for", "busy", "travel a lot" -> easy
+- "medium care", "some attention needed" -> moderate
+- "advanced", "professional", "expert level" -> expert
+
+The size field MUST ONLY be:
+
+- small
+- medium
+- large
+
+If the intent is compare_plants, the user is asking to compare exactly
+two named plants (e.g. "compare aloe vera and snake plant",
+"difference between money plant and jade plant").
+
+Extract the two plant names into "comparePlants": ["name1", "name2"].
+
+If the user does not clearly name two plants, use intent "recommend_plants"
+instead.
+
+If the user asks for a specific NUMBER of plants (e.g. "top 5 plants",
+"best 3 indoor plants", "show me 5 plants for my office"), extract that
+number into "count" (as an integer). If no specific number is mentioned,
+use 0 — this does NOT change which intent to pick; it's just how many
+to recommend when intent is recommend_plants.
+
+Prices:
+
+If the user says:
+
+under 300
+below 300
+less than 300
+
+Return
+
+"maxPrice":"300"
+
+If the user says
+
+above 500
+
+Return
+
+"minPrice":"500"
+
+Return EXACTLY this schema:
+
+{{
+    "intent":"",
+    "filters":{{
+        "category":"",
+        "care":"",
+        "size":"",
+        "minPrice":"",
+        "maxPrice":"",
+        "search":""
+    }},
+    "comparePlants":["",""],
+    "count":0
+}}
+
+User Query:
+
+{user_query}
+"""
+
+    response = generate_text(prompt)
     print("✅ Intent detection finished")
-    print(intent_data)
 
-    tool = router.route(intent_data["intent"])
-    print("🛠 Selected Tool :", tool)
+    intent_data = json.loads(response)
 
-    # ---------------------------------
-    # SHORT-CIRCUIT : Compare Plants
-    # ---------------------------------
-    # Compare doesn't need retrieval or Gemini ranking —
-    # it's a direct lookup + attribute diff.
+    # -------------------------------------------------
+    # Fallback: fix category if Gemini returned something
+    # outside the 4 valid values (e.g. "living room")
+    # -------------------------------------------------
+    filters = intent_data.get("filters", {})
+    category = (filters.get("category") or "").lower().strip()
 
-    if tool == "compare":
+    if category not in VALID_CATEGORIES:
+        resolved = resolve_category_from_knowledge_base(user_query)
+        filters["category"] = resolved
+        print(f"🔧 Category fallback: '{category}' -> '{resolved}'")
 
-        compare_names = intent_data.get("comparePlants", ["", ""])
+    # -------------------------------------------------
+    # Fallback: fix care if Gemini returned "low/medium/high"
+    # instead of "easy/moderate/expert"
+    # -------------------------------------------------
+    care = (filters.get("care") or "").lower().strip()
+    care_map = {"low": "easy", "medium": "moderate", "high": "expert"}
 
-        if len(compare_names) < 2 or not compare_names[0] or not compare_names[1]:
+    if care in care_map:
+        filters["care"] = care_map[care]
+    elif care not in VALID_CARE and care != "":
+        filters["care"] = ""
 
-            return build_response({
-                "intent": "compare_plants",
-                "filters": intent_data.get("filters", {}),
-                "comparison": None,
-                "reasoning": {
-                    "title": "Need Two Plants",
-                    "message": "Please tell me the two plants you'd like to compare."
-                },
-                "confidence": 40,
-                "follow_up": [
-                    "Which two plants would you like to compare?"
-                ]
-            })
+    intent_data["filters"] = filters
 
-        comparison = compare_tool.execute(
-            plants,
-            compare_names[0],
-            compare_names[1]
-        )
-
-        if not comparison:
-
-            return build_response({
-                "intent": "compare_plants",
-                "filters": intent_data.get("filters", {}),
-                "comparison": None,
-                "reasoning": {
-                    "title": "Plants Not Found",
-                    "message": f"I couldn't find one or both of '{compare_names[0]}' and '{compare_names[1]}' in our nursery."
-                },
-                "confidence": 40,
-                "follow_up": [
-                    "Would you like to browse our plant categories instead?"
-                ]
-            })
-
-        return build_response({
-            "intent": "compare_plants",
-            "filters": intent_data.get("filters", {}),
-            "comparison": comparison,
-            "reasoning": {
-                "title": "Plant Comparison",
-                "message": f"Here's how {comparison['plant1']['name']} compares to {comparison['plant2']['name']}."
-            },
-            "confidence": 90,
-            "follow_up": []
-        })
-
-    # ---------------------------------
-    # STEP 2 : Retrieve Relevant Plants
-    # ---------------------------------
-
-    print("STEP 2")
-
-    if tool == "search":
-
-        filtered = search_tool.execute(
-            plants,
-            intent_data["filters"]
-        )
-
-        retrieved_plants = retriever.retrieve(
-            user_query,
-            filtered
-        )
-
-    else:
-
-        retrieved_plants = retriever.retrieve(
-            user_query,
-            plants
-        )
-
-    print(f"Retrieved {len(retrieved_plants)} plants")
-
-    # ---------------------------------
-    # STEP 3 : Build Prompt
-    # ---------------------------------
-
-    print("STEP 3")
-
-    prompt = build_recommendation_prompt(
-        user_query,
-        retrieved_plants,
-        intent_data
-    )
-
-    print("Prompt Length:", len(prompt))
-
-    # ---------------------------------
-    # STEP 4 : Gemini
-    # ---------------------------------
-
-    print("STEP 4")
-
-    try:
-
-        raw_response = generate_text(prompt)
-
-    except Exception as e:
-
-        print("❌ Gemini Failed")
-        print(e)
-
-        # Preserve the correctly-detected intent/filters instead of
-        # discarding them — Gemini failing to rank/explain shouldn't
-        # throw away a perfectly good category/price filter match.
-        return build_response({
-            "intent": intent_data["intent"],
-            "filters": intent_data["filters"],
-            "recommended_plants": [],
-            "reasoning": {
-                "title": "AI Recommendation",
-                "message": "Showing the best matching plants from our nursery."
-            },
-            "confidence": 80,
-            "follow_up": [
-                "Would you like indoor plants?",
-                "Would you like low-maintenance plants?"
-            ]
-        })
-
-    # ---------------------------------
-    # STEP 5 : Parse JSON
-    # ---------------------------------
-
-    print("STEP 5")
-
-    try:
-
-        ai_json = json.loads(raw_response)
-
-    except Exception:
-
-        print("❌ JSON Parsing Failed")
-        print("Raw response was:", raw_response)
-
-        # CRITICAL: preserve the intent/filters we already correctly
-        # detected in Step 1, instead of resetting to empty filters.
-        # An empty-filters fallback here previously caused the backend
-        # to match (and return) the ENTIRE product catalog, since
-        # empty category/price filters skip all WHERE clauses.
-        ai_json = {
-            "intent": intent_data["intent"],
-            "recommended_plants": [],
-            "filters": intent_data["filters"],
-            "reasoning": {
-                "title": "Showing Matching Plants",
-                "message": "Here are plants that match your filters."
-            },
-            "confidence": 70,
-            "follow_up": [
-                "Would you like to narrow it down further?"
-            ]
-        }
-
-    # Normalize confidence — Gemini sometimes returns 0-1 float instead
-    # of 0-100 int, which crashes FastAPI's strict response validation.
-    ai_json["confidence"] = normalize_confidence(ai_json.get("confidence", 80))
-
-    return build_response(ai_json)
+    return intent_data
