@@ -294,7 +294,7 @@ router.delete(
 router.post(
   "/recommend",
   asyncHandler(async (req, res) => {
-    const { query } = req.body;
+    const { query: userQuery } = req.body;
 
     if (!query) {
       return res.status(400).json({
@@ -303,10 +303,30 @@ router.post(
       });
     }
 
+    // ==========================
+    // Redis Cache Check
+    // ==========================
+    // Cache AI recommendation responses by normalized query text, so
+    // identical/near-identical queries (very common while testing, or
+    // from repeat visitors) skip the Gemini call entirely. This both
+    // speeds up response time and conserves your LLM rate limit/quota.
+    const normalizedQuery = query.trim().toLowerCase();
+    const cacheKey = `ai_recommend:${normalizedQuery}`;
+
+    try {
+      const cached = await redisClient.get(cacheKey);
+      if (cached) {
+        console.log("⚡ AI recommendation cache hit:", normalizedQuery);
+        return res.json(JSON.parse(cached));
+      }
+      console.log("🧭 AI recommendation cache miss:", normalizedQuery);
+    } catch (cacheErr) {
+      console.log("⚠️ Redis cache read failed, continuing without cache:", cacheErr.message);
+    }
+
     // Call FastAPI
-   // Call FastAPI
-console.log("AI_SERVICE_URL:", process.env.AI_SERVICE_URL);
-const plantResult = await pool.query(`
+    console.log("AI_SERVICE_URL:", process.env.AI_SERVICE_URL);
+    const plantResult = await pool.query(`
   SELECT
     name,
     category,
@@ -317,120 +337,127 @@ const plantResult = await pool.query(`
 FROM products
   WHERE category IN ('indoor', 'outdoor', 'flowering', 'succulent')
 `);
-console.log(plantResult.rows);
+    console.log(plantResult.rows);
 
-console.log("==================================");
-console.log("🚀 Calling AI Service...");
+    console.log("==================================");
+    console.log("🚀 Calling AI Service...");
 
-// TEMPORARY: Send only first 5 plants
-const payload = {
-    query,
-    plants: plantResult.rows.map(p => ({
-    name: p.name || "",
-    category: p.category || "",
-    care: p.care || "",
-    description: p.description || "",
-    price: Number(p.price || 0),
-    size: p.size || ""
-}))
-};
+    const payload = {
+      query,
+      plants: plantResult.rows.map(p => ({
+        name: p.name || "",
+        category: p.category || "",
+        care: p.care || "",
+        description: p.description || "",
+        price: Number(p.price || 0),
+        size: p.size || ""
+      }))
+    };
 
-console.log("Plants Sent:", payload.plants.length);
-const start = Date.now();
+    console.log("Plants Sent:", payload.plants.length);
+    const start = Date.now();
 
-try {
+    try {
 
-    console.log("Calling:", `${process.env.AI_SERVICE_URL}/recommend`);
+      console.log("Calling:", `${process.env.AI_SERVICE_URL}/recommend`);
 
-    const aiResponse = await axios.post(
+      const aiResponse = await axios.post(
         `${process.env.AI_SERVICE_URL}/recommend`,
         payload,
         {
-            timeout: 90000,
+          timeout: 90000,
         }
-    );
+      );
 
-    const aiResult = aiResponse.data;
+      const aiResult = aiResponse.data;
 
-    console.log("SUCCESS");
-    console.log("⏱ AI Response Time:", Date.now() - start, "ms");
-    console.log("========== AI RESPONSE ==========");
-    console.log(aiResult);
+      console.log("SUCCESS");
+      console.log("⏱ AI Response Time:", Date.now() - start, "ms");
+      console.log("========== AI RESPONSE ==========");
+      console.log(aiResult);
 
-    let products;
+      let products;
 
-    switch (aiResult.intent) {
+      switch (aiResult.intent) {
 
         case "browse_all":
-            products = await getFilteredProducts({
-                page: 1,
-                limit: 1000,
-            });
-            break;
+          products = await getFilteredProducts({
+            page: 1,
+            limit: 1000,
+          });
+          break;
 
         case "browse_category":
         case "browse_filtered":
-            products = await getFilteredProducts({
-                ...aiResult.filters,
-                page: 1,
-                limit: 1000,
-            });
-            break;
+          products = await getFilteredProducts({
+            ...aiResult.filters,
+            page: 1,
+            limit: 1000,
+          });
+          break;
 
         case "compare_plants":
-            // No product query needed — the AI service already built
-            // the comparison data in aiResult.comparison. The frontend
-            // should check aiResult.intent === "compare_plants" and
-            // render aiResult.comparison instead of a product grid.
-            products = [];
-            break;
+          // No product query needed — comparison data is already
+          // built by the AI service and lives in aiResult.comparison
+          products = [];
+          break;
 
         case "recommend_plants":
         default:
-            products = await getFilteredProducts({
-                ...aiResult.filters,
-                recommended_plants: aiResult.recommended_plants,
-                page: 1,
-                limit: 20,
-            });
-            break;
-    }
+          products = await getFilteredProducts({
+            ...aiResult.filters,
+            recommended_plants: aiResult.recommended_plants,
+            page: 1,
+            limit: 20,
+          });
+          break;
+      }
 
-    console.log("========== PRODUCTS ==========");
-    console.log(products.length);
+      console.log("========== PRODUCTS ==========");
+      console.log(products.length);
 
-    console.log("========== FINAL RESPONSE ==========");
-    console.log(JSON.stringify({
+      const responseData = {
         success: true,
         ai: aiResult,
         products,
-    }, null, 2));
+      };
 
-    return res.json({
-        success: true,
-        ai: aiResult,
-        products,
-    });
+      console.log("========== FINAL RESPONSE ==========");
+      console.log(JSON.stringify(responseData, null, 2));
 
-} catch (err) {
+      // ==========================
+      // Redis Cache Write
+      // ==========================
+      // Cache for 30 minutes. Short enough that stock/price changes
+      // don't stay stale for long, long enough to absorb repeated
+      // identical queries during normal browsing/testing.
+      try {
+        await redisClient.setEx(cacheKey, 1800, JSON.stringify(responseData));
+      } catch (cacheErr) {
+        console.log("⚠️ Redis cache write failed:", cacheErr.message);
+      }
 
-    console.log("========== AXIOS ERROR ==========");
+      return res.json(responseData);
 
-    console.log("Message:", err.message);
-    console.log("Code:", err.code);
+    } catch (err) {
 
-    if (err.response) {
+      console.log("========== AXIOS ERROR ==========");
+
+      console.log("Message:", err.message);
+      console.log("Code:", err.code);
+
+      if (err.response) {
         console.log("Status:", err.response.status);
         console.log("Headers:", err.response.headers);
         console.log("Body:", err.response.data);
-    }
+      }
 
-    if (err.request) {
+      if (err.request) {
         console.log("No response received from AI service.");
-    }
+      }
 
-    throw err;
-}
+      throw err;
+    }
   })
 );
 module.exports = router;
