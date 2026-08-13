@@ -34,6 +34,38 @@ def normalize_confidence(value):
     return int(round(value))
 
 
+def normalize_recommended_plants(value):
+    """
+    Gemini sometimes returns full plant objects in `recommended_plants`
+    instead of plain name strings — e.g.
+    {"name": "Jasmine", "category": "flowering", ...}
+    instead of just "Jasmine". The schema strictly requires
+    list[str], so FastAPI crashes the whole response with a
+    ResponseValidationError otherwise. Extract just the name from
+    any dict entries, and drop anything that isn't a usable string.
+    """
+
+    if not isinstance(value, list):
+        return []
+
+    normalized = []
+
+    for item in value:
+
+        if isinstance(item, str):
+            normalized.append(item)
+
+        elif isinstance(item, dict):
+            name = item.get("name")
+            if isinstance(name, str) and name:
+                normalized.append(name)
+
+        # anything else (int, None, etc.) is silently dropped —
+        # it can't be turned into a usable plant name anyway
+
+    return normalized
+
+
 def get_ai_recommendation(user_query: str, plants: list) -> dict:
     """
     GreenLeaf AI Pipeline
@@ -132,12 +164,7 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
     # ---------------------------------
     # IMPORTANT: filters (category/care/size/price) are now applied
     # for EVERY intent that reaches this point — including
-    # recommend_plants — not just "search"-routed intents. Previously,
-    # recommend_plants skipped search_tool.execute() entirely, so a
-    # query like "top 5 indoor plants under ₹500" had its price/category
-    # constraints reduced to a soft hint in the Gemini prompt instead of
-    # a hard filter, letting over-budget or wrong-category plants slip
-    # into the candidate pool and sometimes into the final answer.
+    # recommend_plants — not just "search"-routed intents.
 
     print("STEP 2")
 
@@ -197,9 +224,6 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
         print("❌ Gemini Failed")
         print(e)
 
-        # Preserve the correctly-detected intent/filters instead of
-        # discarding them — Gemini failing to rank/explain shouldn't
-        # throw away a perfectly good category/price filter match.
         return build_response({
             "intent": intent_data["intent"],
             "filters": intent_data["filters"],
@@ -230,11 +254,6 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
         print("❌ JSON Parsing Failed")
         print("Raw response was:", raw_response)
 
-        # CRITICAL: preserve the intent/filters we already correctly
-        # detected in Step 1, instead of resetting to empty filters.
-        # An empty-filters fallback here previously caused the backend
-        # to match (and return) the ENTIRE product catalog, since
-        # empty category/price filters skip all WHERE clauses.
         ai_json = {
             "intent": intent_data["intent"],
             "recommended_plants": [],
@@ -252,5 +271,12 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
     # Normalize confidence — Gemini sometimes returns 0-1 float instead
     # of 0-100 int, which crashes FastAPI's strict response validation.
     ai_json["confidence"] = normalize_confidence(ai_json.get("confidence", 80))
+
+    # Normalize recommended_plants — Gemini sometimes returns full
+    # plant objects instead of plain name strings, which also crashes
+    # FastAPI's strict list[str] response validation.
+    ai_json["recommended_plants"] = normalize_recommended_plants(
+        ai_json.get("recommended_plants", [])
+    )
 
     return build_response(ai_json)
