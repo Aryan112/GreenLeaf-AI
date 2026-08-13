@@ -42,7 +42,9 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
       ↓
     Intent Detection
       ↓
-    Hybrid RAG Retriever / Compare Tool
+    Filter (always applied, even for recommend_plants) / Compare Tool
+      ↓
+    Hybrid RAG Retriever
       ↓
     Prompt Builder (skipped for compare)
       ↓
@@ -126,16 +128,30 @@ def get_ai_recommendation(user_query: str, plants: list) -> dict:
         })
 
     # ---------------------------------
-    # STEP 2 : Retrieve Relevant Plants
+    # STEP 2 : Filter + Retrieve Relevant Plants
     # ---------------------------------
+    # IMPORTANT: filters (category/care/size/price) are now applied
+    # for EVERY intent that reaches this point — including
+    # recommend_plants — not just "search"-routed intents. Previously,
+    # recommend_plants skipped search_tool.execute() entirely, so a
+    # query like "top 5 indoor plants under ₹500" had its price/category
+    # constraints reduced to a soft hint in the Gemini prompt instead of
+    # a hard filter, letting over-budget or wrong-category plants slip
+    # into the candidate pool and sometimes into the final answer.
 
     print("STEP 2")
 
-    if tool == "search":
+    filters = intent_data.get("filters", {})
+    has_active_filters = any(
+        (filters.get(key) or "") not in ("", "all")
+        for key in ("category", "care", "size", "minPrice", "maxPrice", "search")
+    )
+
+    if tool == "search" or has_active_filters:
 
         filtered = search_tool.execute(
             plants,
-            intent_data["filters"]
+            filters
         )
 
         retrieved_plants = retriever.retrieve(
