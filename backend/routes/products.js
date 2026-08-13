@@ -294,12 +294,16 @@ router.delete(
 router.post(
   "/recommend",
   asyncHandler(async (req, res) => {
-    const { query: userQuery } = req.body;
+    const { query } = req.body;
 
-    if (!query) {
+    // Validate that query exists AND is actually a string. Truthy
+    // non-string values (an object, number, boolean) previously
+    // passed the old `if (!query)` check but crashed on `.trim()`,
+    // returning a raw 500 instead of a clean validation error.
+    if (!query || typeof query !== "string" || !query.trim()) {
       return res.status(400).json({
         success: false,
-        message: "Query is required",
+        message: "Query is required and must be a non-empty string",
       });
     }
 
